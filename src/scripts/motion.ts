@@ -157,7 +157,7 @@
       });
     };
 
-    if (!("IntersectionObserver" in window)) {
+    if (!window.IntersectionObserver) {
       window.addEventListener("scroll", request, { passive: true });
       window.addEventListener("resize", request, { passive: true });
       request();
