@@ -7,6 +7,7 @@ status: launching
 order: 1
 color: "#d08f45"
 heroImage: /assets/images/products/vedthenics-icon.webp
+url: https://vedthenics.chnkukoolwal.vc
 sections:
   - heading: Why it exists
     body: >-

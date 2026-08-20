@@ -72,31 +72,49 @@ const structuredData = {
     </section>
   ))}
 
+  <section class="nv-product-section nv-edge-top" aria-label={`Get ${data.name}`}>
+    <div class="nv-container">
+      <div class="nv-product-section__inner">
+        <h2 class="nv-kicker nv-product-section__heading nv-reveal">Get {data.name}</h2>
+        <div class="nv-product-section__body nv-reveal nv-reveal--d1">
+          <div class="nv-product-links">
+            {data.url ? (
+              <a class="nv-product-link-row" href={data.url}>
+                <span class="nv-product-link-row__label">Website</span>
+                <span class="nv-product-link-row__value">{data.url.replace(/^https?:\/\//, "")} <span aria-hidden="true">&rarr;</span></span>
+              </a>
+            ) : (
+              <div class="nv-product-link-row nv-product-link-row--pending">
+                <span class="nv-product-link-row__label">Website</span>
+                <span class="nv-product-link-row__value">Coming soon</span>
+              </div>
+            )}
+            {data.appStoreUrl ? (
+              <a class="nv-product-link-row" href={data.appStoreUrl}>
+                <span class="nv-product-link-row__label">App Store</span>
+                <span class="nv-product-link-row__value">Download <span aria-hidden="true">&rarr;</span></span>
+              </a>
+            ) : (
+              <div class="nv-product-link-row nv-product-link-row--pending">
+                <span class="nv-product-link-row__label">App Store</span>
+                <span class="nv-product-link-row__value">Coming soon</span>
+              </div>
+            )}
+            {data.playStoreUrl && (
+              <a class="nv-product-link-row" href={data.playStoreUrl}>
+                <span class="nv-product-link-row__label">Google Play</span>
+                <span class="nv-product-link-row__value">Download <span aria-hidden="true">&rarr;</span></span>
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="nv-section nv-section--tight nv-edge-top" style="text-align:center;">
     <p class="nv-label nv-reveal">Built by Nuvya.</p>
-
-    {data.url && (
-      <p class="nv-reveal nv-reveal--d1" style="margin-top: var(--space-5);">
-        <a class="nv-arrow-link" href={data.url} style="justify-content:center;">Visit {data.name} <span aria-hidden="true">&rarr;</span></a>
-      </p>
-    )}
-    {data.appStoreUrl && (
-      <p class="nv-reveal nv-reveal--d1" style="margin-top: var(--space-5);">
-        <a class="nv-arrow-link" href={data.appStoreUrl} style="justify-content:center;">Get it on the App Store <span aria-hidden="true">&rarr;</span></a>
-      </p>
-    )}
-    {data.playStoreUrl && (
-      <p class="nv-reveal nv-reveal--d1" style="margin-top: var(--space-5);">
-        <a class="nv-arrow-link" href={data.playStoreUrl} style="justify-content:center;">Get it on Google Play <span aria-hidden="true">&rarr;</span></a>
-      </p>
-    )}
-    {!data.url && !data.appStoreUrl && !data.playStoreUrl && (
-      <p class="nv-meta nv-reveal nv-reveal--d1" style="margin-top: var(--space-5);">
-        {statusLabel[data.status]} — not yet available.
-      </p>
-    )}
-
-    <p class="nv-reveal nv-reveal--d2" style="margin-top: var(--space-7);">
+    <p class="nv-reveal nv-reveal--d1" style="margin-top: var(--space-7);">
       <a class="nv-arrow-link" href="/products" style="justify-content:center;">All products <span aria-hidden="true">&rarr;</span></a>
     </p>
   </section>
