@@ -8,9 +8,14 @@
   "theme_color": "#08080a",
   "icons": [
     {
-      "src": "https://nuvyavc-favicon.chinkukoolwal.workers.dev",
-      "sizes": "768x768",
-      "type": "image/jpeg"
+      "src": "/assets/images/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/images/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
 }
