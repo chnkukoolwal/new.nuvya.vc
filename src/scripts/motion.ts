@@ -26,20 +26,13 @@
     });
   });
 
-  /* Condense the topbar once scrolled past the fold; hide on scroll-down,
-     reveal on scroll-up, so it never fights for attention over the hero. */
+  /* Condense the topbar once scrolled past the fold. Stays visible at all
+     times — a floating nav that vanishes on scroll-down defeats its own
+     purpose as a persistent piece of UI. */
   if (topbar) {
-    let lastY = window.scrollY;
     let ticking = false;
     const onScroll = function () {
-      const y = window.scrollY;
-      topbar.classList.toggle("is-condensed", y > 40);
-      if (y > 160 && y > lastY) {
-        topbar.classList.add("is-hidden");
-      } else {
-        topbar.classList.remove("is-hidden");
-      }
-      lastY = y;
+      topbar.classList.toggle("is-condensed", window.scrollY > 40);
       ticking = false;
     };
     window.addEventListener(
