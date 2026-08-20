@@ -1,5 +1,5 @@
 ---
-import { getCollection, render } from "astro:content";
+import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import CloseCTA from "../../components/CloseCTA.astro";
 
@@ -13,7 +13,6 @@ export async function getStaticPaths() {
 
 const { product } = Astro.props;
 const { data } = product;
-const { Content } = await render(product);
 
 const statusLabel: Record<string, string> = {
   building: "Building",
@@ -44,6 +43,11 @@ const structuredData = {
 >
   <section class="nv-product-hero nv-container">
     <div class="nv-product-hero__inner">
+      {data.heroImage && (
+        <span class="nv-product-hero__icon-holder nv-reveal" style={`--dot-color: ${data.color}`}>
+          <img class="nv-product-hero__icon" src={data.heroImage} alt="" width="72" height="72" loading="eager" />
+        </span>
+      )}
       <p class="nv-kicker nv-reveal">Product</p>
       <h1 class="nv-display nv-product-hero__name nv-reveal nv-reveal--d1">{data.name}</h1>
       <p class="nv-h2 nv-product-hero__tagline nv-reveal nv-reveal--d2">{data.tagline}</p>
@@ -68,37 +72,32 @@ const structuredData = {
     </section>
   ))}
 
-  <section class="nv-product-section nv-edge-top" aria-label="Links">
-    <div class="nv-container">
-      <div class="nv-product-section__inner">
-        <h2 class="nv-kicker nv-product-section__heading nv-reveal">Experience</h2>
-        <div class="nv-product-section__body nv-reveal nv-reveal--d1">
-          <div class="nv-note-article__body">
-            <Content />
-          </div>
-          {data.url && (
-            <a class="nv-product-cta" href={data.url}>Visit {data.name} <span aria-hidden="true">&rarr;</span></a>
-          )}
-          {data.appStoreUrl && (
-            <a class="nv-product-cta" href={data.appStoreUrl}>Get it on the App Store <span aria-hidden="true">&rarr;</span></a>
-          )}
-          {data.playStoreUrl && (
-            <a class="nv-product-cta" href={data.playStoreUrl}>Get it on Google Play <span aria-hidden="true">&rarr;</span></a>
-          )}
-          {!data.url && !data.appStoreUrl && !data.playStoreUrl && (
-            <p class="nv-meta" style="margin-top: var(--space-3);">
-              {statusLabel[data.status]} — not yet available.
-            </p>
-          )}
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="nv-section nv-section--tight" style="text-align:center;">
+  <section class="nv-section nv-section--tight nv-edge-top" style="text-align:center;">
     <p class="nv-label nv-reveal">Built by Nuvya.</p>
-    <p class="nv-reveal nv-reveal--d1" style="margin-top: var(--space-4);">
-      <a class="nv-arrow-link" href="/products">All products <span aria-hidden="true">&rarr;</span></a>
+
+    {data.url && (
+      <p class="nv-reveal nv-reveal--d1" style="margin-top: var(--space-5);">
+        <a class="nv-arrow-link" href={data.url} style="justify-content:center;">Visit {data.name} <span aria-hidden="true">&rarr;</span></a>
+      </p>
+    )}
+    {data.appStoreUrl && (
+      <p class="nv-reveal nv-reveal--d1" style="margin-top: var(--space-5);">
+        <a class="nv-arrow-link" href={data.appStoreUrl} style="justify-content:center;">Get it on the App Store <span aria-hidden="true">&rarr;</span></a>
+      </p>
+    )}
+    {data.playStoreUrl && (
+      <p class="nv-reveal nv-reveal--d1" style="margin-top: var(--space-5);">
+        <a class="nv-arrow-link" href={data.playStoreUrl} style="justify-content:center;">Get it on Google Play <span aria-hidden="true">&rarr;</span></a>
+      </p>
+    )}
+    {!data.url && !data.appStoreUrl && !data.playStoreUrl && (
+      <p class="nv-meta nv-reveal nv-reveal--d1" style="margin-top: var(--space-5);">
+        {statusLabel[data.status]} — not yet available.
+      </p>
+    )}
+
+    <p class="nv-reveal nv-reveal--d2" style="margin-top: var(--space-7);">
+      <a class="nv-arrow-link" href="/products" style="justify-content:center;">All products <span aria-hidden="true">&rarr;</span></a>
     </p>
   </section>
 

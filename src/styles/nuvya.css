@@ -116,7 +116,7 @@ body.nuvya {
 .nuvya img, .nuvya svg { max-width: 100%; display: block; }
 .nuvya a { text-decoration: none; color: inherit; }
 .nuvya ul { margin: 0; padding: 0; list-style: none; }
-.nuvya h1, .nuvya h2, .nuvya h3, .nuvya p { margin: 0; }
+h1, h2, h3, p { margin: 0; }
 .nuvya button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
 
 /* ---- Layout primitives -------------------------------------------------- */

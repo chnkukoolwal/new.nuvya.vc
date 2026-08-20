@@ -73,8 +73,8 @@ const beliefs = [
       <p class="nv-kicker nv-reveal">We believe.</p>
       <h2 id="beliefs-heading" class="nv-sr-only">Beliefs</h2>
       <div class="nv-beliefs" style="margin-top: var(--space-7);">
-        {beliefs.map((belief) => (
-          <p class="nv-belief" data-wipe>{belief}</p>
+        {beliefs.map((belief, i) => (
+          <p class={`nv-belief ${i % 2 === 1 ? "nv-belief--offset" : ""}`} data-wipe>{belief}</p>
         ))}
       </div>
     </div>

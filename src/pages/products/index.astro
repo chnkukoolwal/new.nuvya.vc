@@ -29,12 +29,17 @@ const products = (await getCollection("products")).sort((a, b) => a.data.order -
     <div class="nv-container">
       <div class="nv-product-list" data-stagger-list>
         {products.map((product, i) => (
-          <a class="nv-product-row" href={`/products/${product.id}`}>
+          <a class="nv-product-row" href={`/products/${product.id}`} style={`--dot-color: ${product.data.color}`}>
             <div class="nv-product-row__grid">
-              <span class="nv-product-row__index nv-numeral">{String(i + 1).padStart(2, "0")}</span>
+              <span class="nv-product-row__index-wrap">
+                {product.data.heroImage && (
+                  <img class="nv-product-row__icon" src={product.data.heroImage} alt="" width="32" height="32" loading="lazy" />
+                )}
+                <span class="nv-product-row__index nv-numeral">{String(i + 1).padStart(2, "0")}</span>
+              </span>
               <span class="nv-product-row__name">{product.data.name}</span>
               <span class="nv-product-row__meta nv-meta">
-                <span class="nv-status-dot" style={`--dot-color: ${product.data.color}`}></span>
+                <span class="nv-status-dot"></span>
                 {product.data.status}
               </span>
               <p class="nv-lede nv-product-row__tagline">{product.data.tagline}</p>

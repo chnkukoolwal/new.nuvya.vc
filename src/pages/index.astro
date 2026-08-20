@@ -65,12 +65,17 @@ const structuredData = {
 
       <div class="nv-product-list" data-stagger-list>
         {products.map((product, i) => (
-          <a class="nv-product-row" href={`/products/${product.id}`}>
+          <a class="nv-product-row" href={`/products/${product.id}`} style={`--dot-color: ${product.data.color}`}>
             <div class="nv-product-row__grid">
-              <span class="nv-product-row__index nv-numeral">{String(i + 1).padStart(2, "0")}</span>
+              <span class="nv-product-row__index-wrap">
+                {product.data.heroImage && (
+                  <img class="nv-product-row__icon" src={product.data.heroImage} alt="" width="32" height="32" loading="lazy" />
+                )}
+                <span class="nv-product-row__index nv-numeral">{String(i + 1).padStart(2, "0")}</span>
+              </span>
               <span class="nv-product-row__name">{product.data.name}</span>
               <span class="nv-product-row__meta nv-meta">
-                <span class="nv-status-dot" style={`--dot-color: ${product.data.color}`}></span>
+                <span class="nv-status-dot"></span>
                 {product.data.status}
               </span>
               <p class="nv-lede nv-product-row__tagline">{product.data.tagline}</p>
@@ -78,6 +83,18 @@ const structuredData = {
           </a>
         ))}
       </div>
+    </div>
+  </section>
+
+  <section class="nv-section nv-section--tight nv-edge-top" id="studio" aria-labelledby="studio-heading">
+    <div class="nv-container nv-container--narrow" style="text-align:center;">
+      <p class="nv-kicker nv-reveal">Studio</p>
+      <p id="studio-heading" class="nv-h2" data-wipe style="margin-top: var(--space-4);">
+        Conceive. Design. Build. Launch. Own.
+      </p>
+      <p class="nv-reveal nv-reveal--d1" style="margin-top: var(--space-6);">
+        <a class="nv-arrow-link" href="/studio" style="justify-content:center;">How Nuvya builds <span aria-hidden="true">&rarr;</span></a>
+      </p>
     </div>
   </section>
 
