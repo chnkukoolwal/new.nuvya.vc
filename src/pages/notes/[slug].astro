@@ -1,0 +1,42 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CloseCTA from "../../components/CloseCTA.astro";
+
+export async function getStaticPaths() {
+  const notes = await getCollection("notes", ({ data }) => !data.draft);
+  return notes.map((note) => ({
+    params: { slug: note.id },
+    props: { note },
+  }));
+}
+
+const { note } = Astro.props;
+const { data } = note;
+const { Content } = await render(note);
+
+const dateFmt = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" });
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: data.title,
+  description: data.excerpt,
+  datePublished: data.date.toISOString(),
+  author: { "@type": "Organization", name: "Nuvya" },
+};
+---
+<BaseLayout title={data.title} description={data.excerpt} path={`/notes/${note.id}`} type="article" structuredData={structuredData}>
+  <article class="nv-note-article nv-container">
+    <div class="nv-note-article__inner">
+      <p class="nv-kicker nv-reveal">Notes</p>
+      <h1 class="nv-display nv-reveal nv-reveal--d1" style="margin-top: var(--space-3);">{data.title}</h1>
+      <p class="nv-meta nv-reveal nv-reveal--d2" style="margin-top: var(--space-4);">{dateFmt.format(data.date)}</p>
+      <div class="nv-note-article__body nv-reveal nv-reveal--d2">
+        <Content />
+      </div>
+    </div>
+  </article>
+
+  <CloseCTA />
+</BaseLayout>

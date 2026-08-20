@@ -1,0 +1,68 @@
+---
+import NMark from "./NMark.astro";
+
+const links = [
+  { href: "/products", label: "Products" },
+  { href: "/studio", label: "Studio" },
+  { href: "/notes", label: "Notes" },
+  { href: "/about", label: "About" },
+];
+
+const current = Astro.url.pathname;
+const isCurrent = (href: string) => current === href || current.startsWith(href + "/");
+---
+<header class="nv-topbar">
+  <div class="nv-topbar__row">
+    <a class="nv-topbar__brand" href="/" aria-label="Nuvya, home">
+      <NMark size={17} class="nv-topbar__mark" />
+      <span class="nv-topbar__word">NUVYA</span>
+    </a>
+
+    <nav class="nv-topbar__nav" aria-label="Primary">
+      {links.map((link) => (
+        <a
+          class="nv-topbar__link"
+          href={link.href}
+          aria-current={isCurrent(link.href) ? "page" : undefined}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <div style="display:flex; align-items:center; gap: var(--space-6);">
+      <a class="nv-topbar__cta" href="mailto:chnkukoolwal@gmail.com">
+        Let&rsquo;s build <span aria-hidden="true">&rarr;</span>
+      </a>
+      <button
+        class="nv-topbar__toggle"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="nv-mobile-menu"
+        aria-label="Open menu"
+      >
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="nv-menu" id="nv-mobile-menu" data-menu>
+  <nav class="nv-menu__list" aria-label="Mobile">
+    {links.map((link) => (
+      <a
+        class="nv-menu__link"
+        href={link.href}
+        aria-current={isCurrent(link.href) ? "page" : undefined}
+      >
+        {link.label}
+      </a>
+    ))}
+  </nav>
+  <div class="nv-menu__foot">
+    <a class="nv-topbar__cta" href="mailto:chnkukoolwal@gmail.com">
+      Let&rsquo;s build <span aria-hidden="true">&rarr;</span>
+    </a>
+    <span class="nv-label">Technology Studios</span>
+  </div>
+</div>

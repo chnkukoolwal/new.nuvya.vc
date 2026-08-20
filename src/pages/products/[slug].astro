@@ -1,0 +1,106 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CloseCTA from "../../components/CloseCTA.astro";
+
+export async function getStaticPaths() {
+  const products = await getCollection("products");
+  return products.map((product) => ({
+    params: { slug: product.id },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+const { data } = product;
+const { Content } = await render(product);
+
+const statusLabel: Record<string, string> = {
+  building: "Building",
+  launching: "Launching",
+  live: "Live",
+  archived: "Archived",
+};
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: data.name,
+  applicationCategory: data.category,
+  description: data.oneLiner,
+  ...(data.url ? { url: data.url } : {}),
+  publisher: {
+    "@type": "Organization",
+    name: "Nuvya",
+    url: "https://new.nuvya.vc/",
+  },
+};
+---
+<BaseLayout
+  title={data.name}
+  description={data.oneLiner}
+  path={`/products/${product.id}`}
+  structuredData={structuredData}
+>
+  <section class="nv-product-hero nv-container">
+    <div class="nv-product-hero__inner">
+      <p class="nv-kicker nv-reveal">Product</p>
+      <h1 class="nv-display nv-product-hero__name nv-reveal nv-reveal--d1">{data.name}</h1>
+      <p class="nv-h2 nv-product-hero__tagline nv-reveal nv-reveal--d2">{data.tagline}</p>
+      <p class="nv-lede nv-reveal nv-reveal--d2" style="margin-top: var(--space-4); max-width: 60ch;">
+        {data.oneLiner}
+      </p>
+      <div class="nv-product-hero__status nv-reveal nv-reveal--d3">
+        <span class="nv-status-dot" style={`--dot-color: ${data.color}`}></span>
+        {statusLabel[data.status]} &middot; {data.category}
+      </div>
+    </div>
+  </section>
+
+  {data.sections.map((section) => (
+    <section class="nv-product-section nv-edge-top">
+      <div class="nv-container">
+        <div class="nv-product-section__inner">
+          <h2 class="nv-kicker nv-product-section__heading nv-reveal">{section.heading}</h2>
+          <p class="nv-lede nv-product-section__body nv-reveal nv-reveal--d1">{section.body}</p>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="nv-product-section nv-edge-top" aria-label="Links">
+    <div class="nv-container">
+      <div class="nv-product-section__inner">
+        <h2 class="nv-kicker nv-product-section__heading nv-reveal">Experience</h2>
+        <div class="nv-product-section__body nv-reveal nv-reveal--d1">
+          <div class="nv-note-article__body">
+            <Content />
+          </div>
+          {data.url && (
+            <a class="nv-product-cta" href={data.url}>Visit {data.name} <span aria-hidden="true">&rarr;</span></a>
+          )}
+          {data.appStoreUrl && (
+            <a class="nv-product-cta" href={data.appStoreUrl}>Get it on the App Store <span aria-hidden="true">&rarr;</span></a>
+          )}
+          {data.playStoreUrl && (
+            <a class="nv-product-cta" href={data.playStoreUrl}>Get it on Google Play <span aria-hidden="true">&rarr;</span></a>
+          )}
+          {!data.url && !data.appStoreUrl && !data.playStoreUrl && (
+            <p class="nv-meta" style="margin-top: var(--space-3);">
+              {statusLabel[data.status]} — not yet available.
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="nv-section nv-section--tight" style="text-align:center;">
+    <p class="nv-label nv-reveal">Built by Nuvya.</p>
+    <p class="nv-reveal nv-reveal--d1" style="margin-top: var(--space-4);">
+      <a class="nv-arrow-link" href="/products">All products <span aria-hidden="true">&rarr;</span></a>
+    </p>
+  </section>
+
+  <CloseCTA />
+</BaseLayout>

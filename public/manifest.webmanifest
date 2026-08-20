@@ -1,0 +1,21 @@
+{
+  "name": "Nuvya Technology Studios",
+  "short_name": "Nuvya",
+  "description": "A technology studio conceiving, building, and launching products from first principles.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#08080a",
+  "theme_color": "#08080a",
+  "icons": [
+    {
+      "src": "/assets/images/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/images/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CloseCTA from "../../components/CloseCTA.astro";
+
+const products = (await getCollection("products")).sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout
+  title="Products"
+  description="Nuvya conceives, designs, builds, launches and owns software products. This is the portfolio, as it stands."
+  path="/products"
+>
+  <section class="nv-intro">
+    <div class="nv-container">
+      <div class="nv-intro__inner">
+        <p class="nv-kicker nv-reveal">Products</p>
+        <h1 class="nv-display nv-reveal nv-reveal--d1" style="margin-top: var(--space-3);">
+          What we've built.
+        </h1>
+        <p class="nv-lede nv-intro__statement nv-reveal nv-reveal--d2">
+          Nuvya's portfolio grows one product at a time — each conceived, designed,
+          built and owned by the studio, not handed off once it ships.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="nv-section nv-section--tight nv-edge-top" aria-label="Product list">
+    <div class="nv-container">
+      <div class="nv-product-list" data-stagger-list>
+        {products.map((product, i) => (
+          <a class="nv-product-row" href={`/products/${product.id}`}>
+            <div class="nv-product-row__grid">
+              <span class="nv-product-row__index nv-numeral">{String(i + 1).padStart(2, "0")}</span>
+              <span class="nv-product-row__name">{product.data.name}</span>
+              <span class="nv-product-row__meta nv-meta">
+                <span class="nv-status-dot" style={`--dot-color: ${product.data.color}`}></span>
+                {product.data.status}
+              </span>
+              <p class="nv-lede nv-product-row__tagline">{product.data.tagline}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CloseCTA />
+</BaseLayout>

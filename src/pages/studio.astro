@@ -1,0 +1,84 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CloseCTA from "../components/CloseCTA.astro";
+
+const process = [
+  {
+    title: "Conceive",
+    body: "Identify ideas, problems, behaviours and technological opportunities worth pursuing.",
+  },
+  {
+    title: "Design",
+    body: "Obsess over the product experience, interaction and visual language before a line of production code exists.",
+  },
+  {
+    title: "Build",
+    body: "Use modern, AI-native development workflows to turn concepts into functioning products.",
+  },
+  {
+    title: "Launch",
+    body: "Ship into the real world, learn from usage and iterate — shipping matters more than announcing.",
+  },
+  {
+    title: "Own",
+    body: "Build products with the intention of creating enduring businesses and intellectual property, not deliverables.",
+  },
+];
+
+const beliefs = [
+  "Small teams can build enormous things.",
+  "Software should feel inevitable.",
+  "Design is not decoration.",
+  "AI changes how products are made.",
+  "The best products earn their complexity.",
+  "Shipping matters more than announcing.",
+];
+---
+<BaseLayout
+  title="Studio"
+  description="Nuvya conceives, designs, builds, launches and owns software products. This is how, and why."
+  path="/studio"
+>
+  <section class="nv-intro">
+    <div class="nv-container">
+      <div class="nv-intro__inner">
+        <p class="nv-kicker nv-reveal">Studio</p>
+        <h1 class="nv-display nv-reveal nv-reveal--d1" style="margin-top: var(--space-3);">We build.</h1>
+        <p class="nv-h2 nv-intro__statement" data-wipe>
+          Nuvya conceives, designs, builds, launches and owns software products.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="nv-section nv-edge-top" aria-labelledby="process-heading">
+    <div class="nv-container">
+      <p id="process-heading" class="nv-sr-only">Process</p>
+      <div class="nv-process">
+        {process.map((step, i) => (
+          <div class="nv-process__step nv-reveal">
+            <span class="nv-process__numeral nv-numeral">{String(i + 1).padStart(2, "0")}</span>
+            <div>
+              <h2 class="nv-process__title">{step.title}</h2>
+              <p class="nv-lede nv-process__body">{step.body}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="nv-section nv-edge-top" aria-labelledby="beliefs-heading">
+    <div class="nv-container nv-container--narrow">
+      <p class="nv-kicker nv-reveal">We believe.</p>
+      <h2 id="beliefs-heading" class="nv-sr-only">Beliefs</h2>
+      <div class="nv-beliefs" style="margin-top: var(--space-7);">
+        {beliefs.map((belief) => (
+          <p class="nv-belief" data-wipe>{belief}</p>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CloseCTA />
+</BaseLayout>

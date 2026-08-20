@@ -1,0 +1,85 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import NMark from "../components/NMark.astro";
+import CloseCTA from "../components/CloseCTA.astro";
+
+const products = (await getCollection("products")).sort((a, b) => a.data.order - b.data.order);
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Nuvya",
+  alternateName: "Nuvya Technology Studios",
+  url: "https://new.nuvya.vc/",
+  logo: "https://new.nuvya.vc/assets/images/nuvya-mark.webp",
+  description: "Nuvya is a technology studio that builds products from first principles.",
+};
+---
+<BaseLayout
+  title="Nuvya — Technology Studios"
+  description="Nuvya is a technology studio building products from first principles."
+  structuredData={structuredData}
+>
+  <div class="nv-hero-scene" data-hero-scene>
+    <section class="nv-hero" id="arrival" aria-label="Nuvya">
+      <div class="nv-hero__stage" data-hero-stage>
+        <span class="nv-hero__mark-holder">
+          <svg class="nv-hero__guides" data-hero-guides viewBox="0 0 140 140" aria-hidden="true">
+            <path d="M6,20 L6,6 L20,6"/>
+            <path d="M120,6 L134,6 L134,20"/>
+            <path d="M134,120 L134,134 L120,134"/>
+            <path d="M20,134 L6,134 L6,120"/>
+          </svg>
+          <NMark size={108} class="nv-hero__mark" parallax />
+          <span class="nv-hero__mark-sweep" data-hero-sweep aria-hidden="true"></span>
+        </span>
+
+        <h1 class="nv-wordmark nv-gradient-text nv-hero__word">NUVYA</h1>
+        <p class="nv-label nv-hero__label">Technology Studios</p>
+        <p class="nv-statement nv-hero__statement">Technology, made tangible.</p>
+      </div>
+
+      <span class="nv-hero__cue" aria-hidden="true">
+        <span class="nv-hero__cue-line"></span>
+      </span>
+    </section>
+  </div>
+
+  <section class="nv-philosophy nv-edge-top" id="philosophy" aria-labelledby="philosophy-heading">
+    <h2 id="philosophy-heading" class="nv-sr-only">Philosophy</h2>
+    <div class="nv-philosophy__inner">
+      <p class="nv-kicker nv-reveal">Philosophy</p>
+      <p class="nv-h2 nv-philosophy__statement" data-wipe>Capital invests in technology. Nuvya builds it.</p>
+    </div>
+  </section>
+
+  <section class="nv-section" id="products" aria-labelledby="products-heading">
+    <div class="nv-container">
+      <div class="nv-section__head">
+        <p class="nv-kicker nv-reveal">Products</p>
+        <h2 id="products-heading" class="nv-display nv-reveal nv-reveal--d1" style="margin-top: var(--space-3);">
+          Selected Products
+        </h2>
+      </div>
+
+      <div class="nv-product-list" data-stagger-list>
+        {products.map((product, i) => (
+          <a class="nv-product-row" href={`/products/${product.id}`}>
+            <div class="nv-product-row__grid">
+              <span class="nv-product-row__index nv-numeral">{String(i + 1).padStart(2, "0")}</span>
+              <span class="nv-product-row__name">{product.data.name}</span>
+              <span class="nv-product-row__meta nv-meta">
+                <span class="nv-status-dot" style={`--dot-color: ${product.data.color}`}></span>
+                {product.data.status}
+              </span>
+              <p class="nv-lede nv-product-row__tagline">{product.data.tagline}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CloseCTA full />
+</BaseLayout>

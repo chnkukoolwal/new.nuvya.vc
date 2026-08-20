@@ -1,0 +1,30 @@
+---
+import NMark from "./NMark.astro";
+
+const links = [
+  { href: "/products", label: "Products" },
+  { href: "/studio", label: "Studio" },
+  { href: "/notes", label: "Notes" },
+  { href: "/about", label: "About" },
+];
+const year = 2026;
+---
+<footer class="nv-footer nv-edge-top">
+  <div class="nv-container">
+    <div class="nv-footer__row">
+      <a class="nv-footer__brand" href="/" aria-label="Nuvya, home">
+        <NMark size={15} class="nv-footer__mark" />
+        <span class="nv-footer__word">NUVYA</span>
+      </a>
+      <nav class="nv-footer__nav" aria-label="Footer">
+        {links.map((link) => (
+          <a class="nv-footer__link" href={link.href}>{link.label}</a>
+        ))}
+      </nav>
+    </div>
+    <div class="nv-footer__bottom">
+      <span><span>&copy;</span> {year} Nuvya Technology Studios</span>
+      <span>Independent technology studio</span>
+    </div>
+  </div>
+</footer>

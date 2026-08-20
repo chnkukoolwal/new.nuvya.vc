@@ -1,0 +1,23 @@
+{
+  "name": "nuvya-website",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Nuvya — independent technology studio. Production website (Astro, deployed to Cloudflare Workers).",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "wrangler:dev": "wrangler dev",
+    "deploy": "astro build && wrangler deploy",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^7.0.7",
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^7.2.4"
+  },
+  "devDependencies": {
+    "wrangler": "^4.124.0"
+  }
+}

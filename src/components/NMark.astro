@@ -1,0 +1,20 @@
+---
+interface Props {
+  size?: number;
+  class?: string;
+  parallax?: boolean;
+  decorative?: boolean;
+}
+const { size = 46, class: className = "", parallax = false, decorative = true } = Astro.props;
+---
+<img
+  src="/assets/images/nuvya-mark.webp"
+  width={size}
+  height={Math.round(size * (591 / 558))}
+  class={className}
+  alt={decorative ? "" : "Nuvya"}
+  aria-hidden={decorative ? "true" : undefined}
+  loading="eager"
+  decoding="async"
+  data-nv-mark={parallax ? "" : undefined}
+/>

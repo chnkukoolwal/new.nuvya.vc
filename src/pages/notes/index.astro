@@ -1,0 +1,60 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import NMark from "../../components/NMark.astro";
+import CloseCTA from "../../components/CloseCTA.astro";
+
+const notes = (await getCollection("notes", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const dateFmt = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" });
+---
+<BaseLayout
+  title="Notes"
+  description="Nuvya's editorial and product journal — building products, design, technology, and lessons from launches."
+  path="/notes"
+>
+  <section class="nv-intro">
+    <div class="nv-container">
+      <div class="nv-intro__inner">
+        <p class="nv-kicker nv-reveal">Notes</p>
+        <h1 class="nv-display nv-reveal nv-reveal--d1" style="margin-top: var(--space-3);">
+          {notes.length ? "Notes." : "Notes are coming."}
+        </h1>
+      </div>
+    </div>
+  </section>
+
+  {notes.length > 0 ? (
+    <section class="nv-section nv-section--tight nv-edge-top">
+      <div class="nv-container">
+        <div class="nv-note-list" data-stagger-list>
+          {notes.map((note) => (
+            <a class="nv-note-row" href={`/notes/${note.id}`}>
+              <span class="nv-note-row__title">{note.data.title}</span>
+              <span class="nv-note-row__date nv-meta">{dateFmt.format(note.data.date)}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  ) : (
+    <section class="nv-forming nv-edge-top" data-forming-scene>
+      <NMark size={558} class="nv-forming__echo" parallax={false} />
+      <div class="nv-container">
+        <div class="nv-forming__inner">
+          <p class="nv-forming__statement nv-reveal nv-notes-empty">
+            This is where Nuvya will write about building products.
+          </p>
+          <p class="nv-lede nv-reveal nv-reveal--d1 nv-notes-empty" style="text-align:center;">
+            Product design, AI-native development, lessons from launches — once
+            there's something real to say.
+          </p>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <CloseCTA />
+</BaseLayout>

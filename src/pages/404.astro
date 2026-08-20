@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import NMark from "../components/NMark.astro";
+---
+<BaseLayout
+  title="Page not found"
+  description="This page doesn't exist."
+  path="/404"
+>
+  <section class="nv-404">
+    <div>
+      <NMark size={64} class="nv-404__mark" />
+      <p class="nv-404__code nv-reveal">404</p>
+      <p class="nv-statement nv-reveal nv-reveal--d1" style="margin-inline:auto; margin-top: var(--space-4);">
+        This page hasn&rsquo;t been built yet.
+      </p>
+      <p class="nv-reveal nv-reveal--d2" style="margin-top: var(--space-6);">
+        <a class="nv-arrow-link" href="/">Back to Nuvya <span aria-hidden="true">&rarr;</span></a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
