@@ -78,7 +78,7 @@
 
   --container-max: 1280px;
   --gutter: clamp(1.25rem, 4vw, 4rem);
-  --topbar-h: 76px;
+  --topbar-h: 92px;
 
   --ease-out: cubic-bezier(0.16, 0.8, 0.24, 1);
   --ease-spatial: cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -86,6 +86,142 @@
   --dur-fast: 220ms;
   --dur-base: 700ms;
   --dur-slow: 1100ms;
+
+  /* ---- Liquid Glass material ----------------------------------------------
+     A single reusable "glass" material system, modelled on Apple's Liquid
+     Glass: neutral frosted translucency (not tinted a flat colour) that
+     picks up whatever light and colour sit behind it — here, Nuvya's own
+     violet/pink atmosphere glow — plus a bright specular edge along the
+     top where light would catch a physical curved surface. */
+  --glass-fill: linear-gradient(165deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 55%, rgba(255, 255, 255, 0.07) 100%);
+  --glass-fill-soft: linear-gradient(165deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.02) 60%, rgba(255, 255, 255, 0.05) 100%);
+  --glass-border: rgba(255, 255, 255, 0.16);
+  --glass-border-top: rgba(255, 255, 255, 0.42);
+  --glass-blur: blur(22px) saturate(150%);
+  --glass-blur-soft: blur(14px) saturate(130%);
+  --glass-shadow: 0 1px 1px rgba(255, 255, 255, 0.12) inset, 0 18px 45px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(160, 106, 223, 0.06);
+  --glass-shadow-hover: 0 1px 1px rgba(255, 255, 255, 0.18) inset, 0 22px 55px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(160, 106, 223, 0.14), 0 0 32px rgba(160, 106, 223, 0.12);
+  --glass-specular: radial-gradient(circle at var(--pointer-x, 50%) var(--pointer-y, 0%), rgba(255, 255, 255, 0.16), transparent 45%);
+
+  --radius-glass-sm: 14px;
+  --radius-glass: 22px;
+  --radius-glass-lg: 32px;
+  --radius-pill: 999px;
+}
+
+/* ---- Glass surface primitives -------------------------------------------- */
+
+.nv-glass {
+  position: relative;
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-top-color: var(--glass-border-top);
+  border-radius: var(--radius-glass);
+  box-shadow: var(--glass-shadow);
+  transition: box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+}
+.nv-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--glass-specular);
+  opacity: 0;
+  transition: opacity var(--dur-base) ease;
+  pointer-events: none;
+}
+.nv-glass--interactive:hover,
+.nv-glass--interactive:focus-within {
+  box-shadow: var(--glass-shadow-hover);
+  border-color: rgba(255, 255, 255, 0.24);
+}
+.nv-glass--interactive:hover::before,
+.nv-glass--interactive:focus-within::before {
+  opacity: 1;
+}
+.nv-glass--pill { border-radius: var(--radius-pill); }
+.nv-glass--sm { border-radius: var(--radius-glass-sm); }
+.nv-glass--soft {
+  background: var(--glass-fill-soft);
+  -webkit-backdrop-filter: var(--glass-blur-soft);
+  backdrop-filter: var(--glass-blur-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nv-glass { transition-duration: 1ms; }
+}
+
+/* Backdrop-filter support is broad but not universal (older Firefox); fall
+   back to a slightly denser flat fill so panels stay legible either way. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nv-glass { background: rgba(21, 10, 38, 0.82); }
+}
+
+/* Interactive specular highlight, shared across every glass surface on the
+   site (nav, cards, panels, buttons) — a bright soft spot that tracks the
+   cursor, as if light were catching the surface of real glass. Position
+   is written to --pointer-x/--pointer-y by motion.ts on pointer move;
+   defaults to a resting top-centre glint when nothing is tracking it. */
+.nv-topbar__row,
+.nv-topbar__cta,
+.nv-product-row,
+.nv-process__step,
+.nv-note-row,
+.nv-close__inner,
+.nv-belief,
+.nv-404__panel,
+.nv-forming__inner,
+.nv-product-section__inner {
+  position: relative;
+  --pointer-x: 50%;
+  --pointer-y: 0%;
+}
+.nv-topbar__row::after,
+.nv-topbar__cta::after,
+.nv-product-row::after,
+.nv-process__step::after,
+.nv-note-row::after,
+.nv-close__inner::after,
+.nv-belief::after,
+.nv-404__panel::after,
+.nv-forming__inner::after,
+.nv-product-section__inner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle 240px at var(--pointer-x) var(--pointer-y), rgba(255, 255, 255, 0.16), transparent 70%);
+  opacity: 0;
+  transition: opacity var(--dur-base) ease;
+  pointer-events: none;
+}
+.nv-topbar__row:hover::after,
+.nv-topbar__cta:hover::after,
+.nv-product-row:hover::after,
+.nv-process__step:hover::after,
+.nv-note-row:hover::after,
+.nv-close__inner:hover::after,
+.nv-belief:hover::after,
+.nv-404__panel:hover::after,
+.nv-forming__inner:hover::after,
+.nv-product-section__inner:hover::after {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nv-topbar__row::after,
+  .nv-topbar__cta::after,
+  .nv-product-row::after,
+  .nv-process__step::after,
+  .nv-note-row::after,
+  .nv-close__inner::after,
+  .nv-belief::after,
+  .nv-404__panel::after,
+  .nv-forming__inner::after,
+  .nv-product-section__inner::after {
+    display: none;
+  }
 }
 
 /* ---- Reset ------------------------------------------------------------- */
@@ -276,31 +412,46 @@ h1, h2, h3, p { margin: 0; }
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 50;
-  height: var(--topbar-h);
-  padding-top: env(safe-area-inset-top);
+  padding-top: calc(env(safe-area-inset-top) + var(--space-4));
+  padding-inline: var(--gutter);
   display: flex;
-  align-items: center;
+  justify-content: center;
   opacity: 0;
-  transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-base) var(--ease-out), background-color var(--dur-base) ease;
+  transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-base) var(--ease-out);
 }
 .nv-topbar.is-ready { opacity: 1; }
-.nv-topbar.is-condensed {
-  background: rgba(10, 2, 22, 0.72);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--n-white-a06);
-}
-.nv-topbar.is-hidden { transform: translateY(-100%); }
+.nv-topbar.is-hidden { transform: translateY(-130%); }
 
+/* The nav itself is the glass surface — a floating capsule, not a
+   full-width bar, so it reads as a physical pane of glass resting above
+   the page rather than a flat coloured strip. */
 .nv-topbar__row {
   width: 100%;
   max-width: var(--container-max);
   margin-inline: auto;
-  padding-inline: var(--gutter);
+  padding-inline: var(--space-6);
+  padding-block: var(--space-3);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-5);
+
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-top-color: var(--glass-border-top);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--glass-shadow);
+  transition: box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out), background var(--dur-base) var(--ease-out);
+}
+.nv-topbar.is-condensed .nv-topbar__row {
+  background: var(--glass-fill-soft), linear-gradient(rgba(10, 2, 22, 0.32), rgba(10, 2, 22, 0.32));
+  box-shadow: var(--glass-shadow-hover);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nv-topbar__row { background: rgba(21, 10, 38, 0.86); }
 }
 
 .nv-topbar__brand {
@@ -589,6 +740,20 @@ h1, h2, h3, p { margin: 0; }
   flex-direction: column;
   align-items: center;
   gap: var(--space-4);
+  max-width: 620px;
+  margin-inline: auto;
+  padding: var(--space-8) var(--space-7);
+
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-top-color: var(--glass-border-top);
+  border-radius: var(--radius-glass-lg);
+  box-shadow: var(--glass-shadow);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nv-forming__inner { background: rgba(21, 10, 38, 0.82); }
 }
 
 .nv-forming__statement {
@@ -665,6 +830,23 @@ h1, h2, h3, p { margin: 0; }
   flex-direction: column;
   align-items: center;
   gap: var(--space-4);
+  max-width: 640px;
+  margin-inline: auto;
+  padding: var(--space-9) var(--space-8);
+
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-top-color: var(--glass-border-top);
+  border-radius: var(--radius-glass-lg);
+  box-shadow: var(--glass-shadow);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nv-close__inner { background: rgba(21, 10, 38, 0.82); }
+}
+@media (max-width: 640px) {
+  .nv-close__inner { padding: var(--space-7) var(--space-5); }
 }
 
 .nv-close__wordmark {

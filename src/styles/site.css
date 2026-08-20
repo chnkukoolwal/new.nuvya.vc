@@ -50,10 +50,26 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4em;
-  opacity: 0.86;
-  transition: opacity var(--dur-fast) ease, gap var(--dur-fast) ease;
+  padding: 0.55em 1.1em;
+  border-radius: var(--radius-pill);
+
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: var(--glass-blur-soft);
+  backdrop-filter: var(--glass-blur-soft);
+  border: 1px solid var(--glass-border);
+  border-top-color: var(--glass-border-top);
+  box-shadow: var(--glass-shadow);
+  transition: box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out), gap var(--dur-fast) ease, transform var(--dur-fast) var(--ease-out);
 }
-.nv-topbar__cta:hover { opacity: 1; gap: 0.6em; }
+.nv-topbar__cta:hover {
+  gap: 0.6em;
+  box-shadow: var(--glass-shadow-hover);
+  border-color: rgba(255, 255, 255, 0.28);
+  transform: translateY(-1px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .nv-topbar__cta:hover { transform: none; }
+}
 
 .nv-topbar__toggle {
   display: none;
@@ -80,7 +96,9 @@
   position: fixed;
   inset: 0;
   z-index: 55;
-  background: var(--n-black);
+  background: linear-gradient(rgba(10, 2, 22, 0.55), rgba(10, 2, 22, 0.55)), var(--glass-fill-soft);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -236,22 +254,28 @@
 .nv-product-list {
   display: flex;
   flex-direction: column;
+  gap: var(--space-5);
 }
 
+/* Each product is its own pane of glass — floating, distinct, catching
+   its own accent colour as light behind frosted glass rather than a flat
+   coloured wash. Scales cleanly whether there is 1 product or 10. */
 .nv-product-row {
   position: relative;
   display: block;
-  padding-block: var(--space-8);
-  border-top: 1px solid var(--n-white-a06);
-  transition: padding var(--dur-base) var(--ease-out);
+  padding: var(--space-7) var(--space-7);
   overflow: hidden;
-}
-.nv-product-row:last-child { border-bottom: 1px solid var(--n-white-a06); }
 
-/* A soft wash of the product's own colour, off to the side, revealed on
-   hover/focus — light as a design material, the same trick as the hero
-   glow, giving each product its own identity without a card, border or
-   screenshot. Scales cleanly whether there is 1 product or 10. */
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-top-color: var(--glass-border-top);
+  border-radius: var(--radius-glass-lg);
+  box-shadow: var(--glass-shadow);
+  transition: box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+}
+
 .nv-product-row::before {
   content: "";
   position: absolute;
@@ -260,11 +284,17 @@
   width: min(420px, 46vw);
   height: 420px;
   transform: translateY(-50%) scale(0.85);
-  background: radial-gradient(circle, color-mix(in srgb, var(--dot-color, var(--n-purple)) 32%, transparent) 0%, transparent 68%);
-  opacity: 0;
+  background: radial-gradient(circle, color-mix(in srgb, var(--dot-color, var(--n-purple)) 38%, transparent) 0%, transparent 68%);
+  opacity: 0.35;
   pointer-events: none;
   transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-slow) var(--ease-out);
   will-change: opacity, transform;
+}
+a.nv-product-row:hover,
+a.nv-product-row:focus-visible {
+  box-shadow: var(--glass-shadow-hover);
+  border-color: rgba(255, 255, 255, 0.24);
+  transform: translateY(-2px);
 }
 a.nv-product-row:hover::before,
 a.nv-product-row:focus-visible::before {
@@ -272,7 +302,12 @@ a.nv-product-row:focus-visible::before {
   transform: translateY(-50%) scale(1);
 }
 @media (prefers-reduced-motion: reduce) {
+  .nv-product-row,
   .nv-product-row::before { transition-duration: 1ms; }
+  a.nv-product-row:hover { transform: none; }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nv-product-row { background: rgba(21, 10, 38, 0.82); }
 }
 
 .nv-product-row__grid {
@@ -403,12 +438,24 @@ a.nv-product-row:focus-visible .nv-product-row__name {
 .nv-product-section {
   position: relative;
   z-index: 1;
-  padding-block: var(--space-9);
+  padding-block: var(--space-6);
 }
 .nv-product-section__inner {
   display: grid;
   grid-template-columns: minmax(160px, 260px) 1fr;
   gap: var(--space-6) var(--space-8);
+  padding: var(--space-7) var(--space-7);
+
+  background: var(--glass-fill-soft);
+  -webkit-backdrop-filter: var(--glass-blur-soft);
+  backdrop-filter: var(--glass-blur-soft);
+  border: 1px solid var(--glass-border);
+  border-top-color: var(--glass-border-top);
+  border-radius: var(--radius-glass-lg);
+  box-shadow: var(--glass-shadow);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nv-product-section__inner { background: rgba(21, 10, 38, 0.78); }
 }
 .nv-product-section__heading { position: sticky; top: calc(var(--topbar-h) + var(--space-5)); align-self: start; }
 .nv-product-section__body { max-width: 62ch; }
@@ -434,6 +481,7 @@ a.nv-product-row:focus-visible .nv-product-row__name {
 .nv-process {
   display: flex;
   flex-direction: column;
+  gap: var(--space-5);
 }
 
 .nv-process__step {
@@ -441,10 +489,24 @@ a.nv-product-row:focus-visible .nv-product-row__name {
   grid-template-columns: minmax(110px, 220px) 1fr;
   align-items: start;
   gap: var(--space-6) var(--space-7);
-  padding-block: var(--space-9);
-  border-top: 1px solid var(--n-white-a06);
+  padding: var(--space-8) var(--space-7);
+
+  background: var(--glass-fill-soft);
+  -webkit-backdrop-filter: var(--glass-blur-soft);
+  backdrop-filter: var(--glass-blur-soft);
+  border: 1px solid var(--glass-border);
+  border-top-color: var(--glass-border-top);
+  border-radius: var(--radius-glass-lg);
+  box-shadow: var(--glass-shadow);
+  transition: box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
 }
-.nv-process__step:last-child { border-bottom: 1px solid var(--n-white-a06); }
+.nv-process__step:hover {
+  box-shadow: var(--glass-shadow-hover);
+  border-color: rgba(255, 255, 255, 0.24);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nv-process__step { background: rgba(21, 10, 38, 0.78); }
+}
 
 .nv-process__numeral {
   font-family: var(--font-sans);
@@ -487,6 +549,19 @@ a.nv-product-row:focus-visible .nv-product-row__name {
   letter-spacing: -0.01em;
   color: var(--n-white);
   max-width: 18ch;
+  display: inline-block;
+  padding: var(--space-5) var(--space-6);
+
+  background: var(--glass-fill-soft);
+  -webkit-backdrop-filter: var(--glass-blur-soft);
+  backdrop-filter: var(--glass-blur-soft);
+  border: 1px solid var(--glass-border);
+  border-top-color: var(--glass-border-top);
+  border-radius: var(--radius-glass-lg);
+  box-shadow: var(--glass-shadow);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nv-belief { background: rgba(21, 10, 38, 0.72); }
 }
 .nv-beliefs .nv-belief--offset {
   margin-left: clamp(0px, 8vw, 4rem);
@@ -513,16 +588,27 @@ a.nv-product-row:focus-visible .nv-product-row__name {
   max-width: 520px;
 }
 
-.nv-note-list { display: flex; flex-direction: column; }
+.nv-note-list { display: flex; flex-direction: column; gap: var(--space-4); }
 .nv-note-row {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-5);
-  padding-block: var(--space-6);
-  border-top: 1px solid var(--n-white-a06);
+  padding: var(--space-5) var(--space-6);
+
+  background: var(--glass-fill-soft);
+  -webkit-backdrop-filter: var(--glass-blur-soft);
+  backdrop-filter: var(--glass-blur-soft);
+  border: 1px solid var(--glass-border);
+  border-top-color: var(--glass-border-top);
+  border-radius: var(--radius-glass);
+  box-shadow: var(--glass-shadow);
+  transition: box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
 }
-.nv-note-row:last-child { border-bottom: 1px solid var(--n-white-a06); }
+.nv-note-row:hover {
+  box-shadow: var(--glass-shadow-hover);
+  border-color: rgba(255, 255, 255, 0.24);
+}
 .nv-note-row__title {
   font-family: var(--font-sans);
   font-weight: 400;
@@ -532,6 +618,9 @@ a.nv-product-row:focus-visible .nv-product-row__name {
 }
 .nv-note-row:hover .nv-note-row__title { color: var(--n-lavender); }
 .nv-note-row__date { white-space: nowrap; }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nv-note-row { background: rgba(21, 10, 38, 0.78); }
+}
 
 .nv-note-article { padding-block: calc(var(--topbar-h) + var(--space-9)) var(--space-10); }
 .nv-note-article__inner { max-width: 680px; }
@@ -551,7 +640,20 @@ a.nv-product-row:focus-visible .nv-product-row__name {
   text-align: center;
   padding: var(--gutter);
 }
-.nv-404__mark { width: clamp(48px, 6vw, 72px); height: auto; margin-inline: auto var(--space-5); opacity: 0.85; }
+.nv-404__panel {
+  padding: var(--space-9) var(--space-8);
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-top-color: var(--glass-border-top);
+  border-radius: var(--radius-glass-lg);
+  box-shadow: var(--glass-shadow);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nv-404__panel { background: rgba(21, 10, 38, 0.82); }
+}
+.nv-404__mark { width: clamp(48px, 6vw, 72px); height: auto; margin: 0 auto var(--space-5); opacity: 0.85; }
 .nv-404__code {
   font-family: var(--font-sans);
   font-weight: 300;

@@ -137,6 +137,30 @@
     });
   });
 
+  /* ---- Liquid Glass specular highlight -------------------------------------
+     Every glass surface tracks the cursor via --pointer-x/--pointer-y, read
+     by the radial-gradient highlight in nuvya.css. One shared listener per
+     element, only on hover-capable pointers, so it costs nothing on touch. */
+  const GLASS_SELECTOR =
+    ".nv-topbar__row, .nv-topbar__cta, .nv-product-row, .nv-process__step, " +
+    ".nv-note-row, .nv-close__inner, .nv-belief, .nv-404__panel, " +
+    ".nv-forming__inner, .nv-product-section__inner";
+  if (canHover && !reduceMotion) {
+    document.querySelectorAll<HTMLElement>(GLASS_SELECTOR).forEach(function (surface) {
+      surface.addEventListener(
+        "mousemove",
+        function (e) {
+          const rect = surface.getBoundingClientRect();
+          const x = ((e.clientX - rect.left) / rect.width) * 100;
+          const y = ((e.clientY - rect.top) / rect.height) * 100;
+          surface.style.setProperty("--pointer-x", x.toFixed(1) + "%");
+          surface.style.setProperty("--pointer-y", y.toFixed(1) + "%");
+        },
+        { passive: true }
+      );
+    });
+  }
+
   /* ==========================================================================
      Scroll-driven scenes — each gated behind an IntersectionObserver so the
      scroll listener only runs while its scene is near the viewport, and each
