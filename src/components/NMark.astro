@@ -4,13 +4,25 @@ interface Props {
   class?: string;
   parallax?: boolean;
   decorative?: boolean;
+  variant?: "favicon" | "logo";
 }
-const { size = 46, class: className = "", parallax = false, decorative = true } = Astro.props;
+const {
+  size = 46,
+  class: className = "",
+  parallax = false,
+  decorative = true,
+  variant = "favicon",
+} = Astro.props;
+
+const asset =
+  variant === "logo"
+    ? { src: "https://nuvyavc-logo.chinkukoolwal.workers.dev", ratio: 569 / 848 }
+    : { src: "https://nuvyavc-favicon.chinkukoolwal.workers.dev", ratio: 1 };
 ---
 <img
-  src="https://nuvyavc-logo.chinkukoolwal.workers.dev"
+  src={asset.src}
   width={size}
-  height={Math.round(size * (569 / 848))}
+  height={Math.round(size * asset.ratio)}
   class={className}
   alt={decorative ? "" : "Nuvya"}
   aria-hidden={decorative ? "true" : undefined}

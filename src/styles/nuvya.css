@@ -438,8 +438,8 @@ h1, h2, h3, p { margin: 0; }
      headers are blocked as CSS mask sources by the browser, even though
      a plain <img src> to the same URL loads fine. Visible <img> uses of
      the logo reference the Worker URL directly elsewhere. */
-  -webkit-mask-image: url("/assets/images/nuvya-logo-mask.jpg");
-  mask-image: url("/assets/images/nuvya-logo-mask.jpg");
+  -webkit-mask-image: url("/assets/images/nuvya-favicon-mask.jpg");
+  mask-image: url("/assets/images/nuvya-favicon-mask.jpg");
   -webkit-mask-size: contain;
   mask-size: contain;
   -webkit-mask-repeat: no-repeat;
