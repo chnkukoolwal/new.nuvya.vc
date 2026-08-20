@@ -1,4 +1,6 @@
 ---
+import ogImageDefault from "../assets/images/og-nuvya-2026.jpg";
+
 interface Props {
   title: string;
   description: string;
@@ -12,7 +14,7 @@ const {
   title,
   description,
   path = "/",
-  image = "/assets/images/og-nuvya-2026.jpg",
+  image = ogImageDefault.src,
   type = "website",
   structuredData,
 } = Astro.props;
