@@ -250,6 +250,24 @@
     return v < 0 ? 0 : v > 1 ? 1 : v;
   }
 
+  /* Shared easing — every scroll-scrubbed scene below mapped progress to
+     opacity/scale/blur linearly, which reads as mechanical (constant-rate
+     change tracks constant-rate scroll input 1:1, with no sense of the
+     motion having its own weight). Real camera moves settle and accelerate;
+     applying these curves to the *progress* value before it drives any
+     visual property is what makes an entrance feel like it's arriving
+     rather than being dragged in step with the finger. */
+  function easeOutCubic(t: number) {
+    const u = 1 - t;
+    return 1 - u * u * u;
+  }
+  function easeInCubic(t: number) {
+    return t * t * t;
+  }
+  function smoothstep(t: number) {
+    return t * t * (3 - 2 * t);
+  }
+
   /* Hero — the flagship scene. .nv-hero-scene is a tall track (190svh);
      .nv-hero is pinned via CSS position:sticky while it scrolls underneath.
      Progress (0-1) is how far the visitor has scrolled through that extra
@@ -266,7 +284,13 @@
       const total = rect.height - vh;
       const progress = total > 0 ? clamp01(-rect.top / total) : 0;
 
-      stage.style.opacity = String(1 - clamp01(progress / 0.88));
+      /* Ease-in: the hero holds fuller for longer, then dissolves with
+         gathering speed — reads as pulling away into the distance, not a
+         constant fade — and lands at the same fully-transparent point
+         (progress 0.88) either way, so it still hands off to Philosophy
+         at the same scroll position. */
+      const fadeT = easeInCubic(clamp01(progress / 0.88));
+      stage.style.opacity = String(1 - fadeT);
       stage.style.transform =
         "scale(" + (1 - progress * 0.07).toFixed(4) + ") translateY(" + (progress * -26).toFixed(2) + "px)";
 
@@ -287,23 +311,29 @@
   })();
 
   /* Philosophy — the second pinned scene, immediately following the hero's.
-     .nv-philosophy-scene is a 220svh track. Two tunings that were off
-     before:
+     .nv-philosophy-scene is a 220svh track. Three tunings layered on top
+     of the base emerge/hold/dissolve structure:
 
-     1) Lead time. Reading progress as a plain function of the track's own
-        rect.top means it stays at exactly 0 — statement fully invisible —
-        until the track has *already* reached the top of the screen. On a
-        short phone viewport that reads as the site catching up with the
-        scroll rather than leading it. `lead` shifts the zero point earlier
-        by up to ~0.85 viewport-heights, so the emergence is already well
-        underway while the hero is still receding above it, and by the
-        time the track actually reaches the top the statement is already
-        in its hold phase — present, not arriving.
-     2) The bridge. Once the statement dissolves (0.55-1 of progress), a
-        second line — "The result." — cross-fades into the exact same
-        spot, holds, then dissolves itself, so idea → creation → product
-        plays out as one continuous move into Products rather than two
-        independent sections with nothing between them. */
+     1) Lead time (~1.1 viewport-heights). Reading progress as a plain
+        function of the track's own rect.top means it stays at exactly 0
+        — statement fully invisible — until the track has *already*
+        reached the top of the screen: the site catching up with the
+        scroll rather than leading it. This lead value was also tuned to
+        close the hand-off gap with the hero: the hero reaches full
+        transparency at the same absolute scroll position where this
+        entrance now begins, so there's no blank beat of pure atmosphere
+        between them — one continuous move, hero dissolving as Philosophy
+        gathers.
+     2) Easing. Emergence eases out (fast in, settles slow — arriving);
+        the dissolve eases in (slow start, gathers speed — being pulled
+        away). Linear progress→opacity mapping is what makes scroll-driven
+        motion read as mechanical; these curves are what make it read as
+        directed.
+     3) The bridge. Once the statement dissolves, a second line — "The
+        result." — cross-fades into the exact same spot, holds, then
+        dissolves itself, so idea → creation → product plays out as one
+        continuous move into Products rather than two independent
+        sections with nothing between them. */
   (function philosophyScene() {
     const scene = document.querySelector<HTMLElement>("[data-philosophy-scene]");
     const text = document.querySelector<HTMLElement>("[data-philosophy-text]");
@@ -313,12 +343,12 @@
     const render = function () {
       const rect = scene.getBoundingClientRect();
       const total = rect.height - vh;
-      const lead = vh * 0.85;
+      const lead = vh * 1.1;
       const progress = total > 0 ? clamp01((lead - rect.top) / (total + lead)) : 0;
 
       let scale: number, blur: number, opacity: number, translate: number;
       if (progress < 0.28) {
-        const t = progress / 0.28;
+        const t = easeOutCubic(progress / 0.28);
         scale = 1.3 - t * 0.3;
         blur = 14 * (1 - t);
         opacity = t;
@@ -329,11 +359,12 @@
         opacity = 1;
         translate = 0;
       } else {
-        const t = clamp01((progress - 0.55) / 0.45);
-        scale = 1 - Math.min(t / 0.4, 1) * 0.3;
-        blur = Math.min(t / 0.4, 1) * 10;
-        opacity = clamp01(1 - t / 0.4);
-        translate = -t * 50;
+        const rawT = clamp01((progress - 0.55) / 0.45);
+        const t = easeInCubic(Math.min(rawT / 0.4, 1));
+        scale = 1 - t * 0.3;
+        blur = t * 10;
+        opacity = 1 - t;
+        translate = -easeInCubic(rawT) * vh * 0.065;
       }
       text.style.opacity = opacity.toFixed(3);
       text.style.filter = "blur(" + blur.toFixed(2) + "px)";
@@ -342,25 +373,25 @@
       if (bridge) {
         let bOpacity = 0;
         let bScale = 0.92;
-        let bTranslate = 16;
+        let bTranslate = vh * 0.02;
         if (progress >= 0.55) {
-          const t = (progress - 0.55) / 0.45;
-          if (t < 0.3) {
+          const rawT = (progress - 0.55) / 0.45;
+          if (rawT < 0.3) {
             bOpacity = 0;
-          } else if (t < 0.55) {
-            const bt = (t - 0.3) / 0.25;
+          } else if (rawT < 0.55) {
+            const bt = easeOutCubic((rawT - 0.3) / 0.25);
             bOpacity = bt;
             bScale = 0.92 + bt * 0.08;
-            bTranslate = 16 * (1 - bt);
-          } else if (t < 0.8) {
+            bTranslate = vh * 0.02 * (1 - bt);
+          } else if (rawT < 0.8) {
             bOpacity = 1;
             bScale = 1;
             bTranslate = 0;
           } else {
-            const bt = (t - 0.8) / 0.2;
+            const bt = easeInCubic((rawT - 0.8) / 0.2);
             bOpacity = 1 - bt;
             bScale = 1 - bt * 0.06;
-            bTranslate = -bt * 20;
+            bTranslate = -bt * vh * 0.025;
           }
         }
         bridge.style.opacity = bOpacity.toFixed(3);
@@ -392,16 +423,21 @@
      scrolls back up — the element is always wherever its own scroll math
      says it should be. Used for products and the About principles, where
      the brief calls for "scroll controls the composition" rather than a
-     fade transported in from a generic component library. */
+     fade transported in from a generic component library. Eased out (fast
+     approach, gentle settle) rather than linear, and translate distance is
+     vh-relative so the same motion reads the same on a phone and a
+     desktop display instead of a fixed pixel amount being a bigger or
+     smaller fraction of the screen depending on viewport. */
   document.querySelectorAll<HTMLElement>("[data-scroll-emerge]").forEach(function (el) {
     if (reduceMotion) return;
     const render = function () {
       const rect = el.getBoundingClientRect();
-      const progress = clamp01((vh * 0.92 - rect.top) / (vh * 0.52));
+      const raw = clamp01((vh * 0.92 - rect.top) / (vh * 0.52));
+      const progress = easeOutCubic(raw);
       el.style.opacity = progress.toFixed(3);
       el.style.filter = "blur(" + ((1 - progress) * 8).toFixed(2) + "px)";
       el.style.transform =
-        "scale(" + (0.94 + progress * 0.06).toFixed(4) + ") translateY(" + ((1 - progress) * 24).toFixed(2) + "px)";
+        "scale(" + (0.94 + progress * 0.06).toFixed(4) + ") translateY(" + ((1 - progress) * vh * 0.03).toFixed(2) + "px)";
     };
     makeScrollScene(el, render);
   });
@@ -430,7 +466,11 @@
      scale/position is a direct function of its own distance from that
      point — so at any moment either exactly one stage is in sharp focus or
      two are mid-crossfade, and scrolling up runs the sequence in reverse.
-     The dot rail mirrors the same "which stage is active" state. */
+     The dot rail mirrors the same "which stage is active" state.
+     smoothstep on the falloff (rather than the raw linear triangle) gives
+     the crossfade itself an ease in/out instead of a constant-rate ramp;
+     the vertical travel is vh-relative so a stage moves the same fraction
+     of the screen on a phone as on a desktop display. */
   (function manifestoScene() {
     const scene = document.querySelector<HTMLElement>("[data-manifesto-scene]");
     const stack = document.querySelector<HTMLElement>("[data-manifesto-stack]");
@@ -460,10 +500,10 @@
 
       items.forEach(function (item, i) {
         const distance = pos - i;
-        const vis = clamp01(1 - Math.abs(distance) / 0.62);
+        const vis = smoothstep(clamp01(1 - Math.abs(distance) / 0.62));
         const blur = (1 - vis) * 10;
         const scale = 0.92 + vis * 0.08;
-        const translate = distance * 55;
+        const translate = distance * vh * 0.075;
 
         item.style.opacity = vis.toFixed(3);
         item.style.filter = "blur(" + blur.toFixed(2) + "px)";
