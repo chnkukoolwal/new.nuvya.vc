@@ -1,10 +1,29 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CloseCTA from "../components/CloseCTA.astro";
+
+const principles = [
+  {
+    heading: "Why we exist",
+    body: "Most software is built to hit a milestone, then handed off. Nuvya exists to do the opposite — to build things worth staying with, long after they ship.",
+  },
+  {
+    heading: "What we believe",
+    body: "Software should feel considered, not assembled. Every product starts as a point of view, not a feature list — a stance on what the thing should actually do for the person using it, refined until the stance is unmistakable.",
+  },
+  {
+    heading: "How we build",
+    body: "The same five stages, every time — conceive, design, build, launch, own — treated as inseparable from one another. Design isn't a phase that happens before code. Ownership isn't a phase that happens after launch.",
+  },
+  {
+    heading: "Why ownership matters",
+    body: "A studio that hands off what it builds stops thinking like an owner. Nuvya stays — improving, maintaining and standing behind every product indefinitely, because a product without an owner eventually stops mattering to anyone.",
+  },
+];
 ---
 <BaseLayout
   title="About"
-  description="Nuvya is an independent technology studio founded by Chinku Koolwal."
+  description="Nuvya is an independent technology studio building software products, from first idea to lasting ownership."
   path="/about"
 >
   <section class="nv-intro">
@@ -13,28 +32,30 @@ import CloseCTA from "../components/CloseCTA.astro";
         <p class="nv-kicker nv-reveal">About</p>
         <h1 class="nv-display nv-gradient-text nv-reveal nv-reveal--d1" style="margin-top: var(--space-3);">Nuvya</h1>
         <p class="nv-h2 nv-intro__statement" data-wipe>
-          An independent technology studio founded by Chinku Koolwal.
+          An independent technology studio building software products, from first idea to lasting ownership.
         </p>
       </div>
     </div>
   </section>
 
-  <section class="nv-section nv-section--tight nv-edge-top">
+  <section class="nv-section nv-edge-top" aria-labelledby="principles-heading">
+    <div class="nv-container">
+      <p id="principles-heading" class="nv-sr-only">Principles</p>
+      <div class="nv-about-grid">
+        {principles.map((item, i) => (
+          <div class="nv-about-card" data-scroll-emerge>
+            <span class="nv-numeral nv-about-card__numeral">{String(i + 1).padStart(2, "0")}</span>
+            <h2 class="nv-about-card__heading">{item.heading}</h2>
+            <p class="nv-lede nv-about-card__body">{item.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="nv-section nv-section--tight nv-edge-top" style="text-align:center;">
     <div class="nv-container nv-container--narrow">
-      <p class="nv-lede nv-about__lede nv-reveal">
-        Nuvya conceives, designs, builds, launches and owns software products —
-        the technology-building arm of a broader ecosystem that also includes
-        Avvyun, its investing and scouting side, and Chinku himself as founder,
-        investor, operator and writer.
-      </p>
-      <p class="nv-lede nv-about__lede nv-reveal nv-reveal--d1">
-        The three stay distinct on purpose. Avvyun looks for what's worth
-        backing. Nuvya builds what's worth building. Nuvya stands on its own —
-        judged by the products it ships, not by who's behind it.
-      </p>
-      <p class="nv-about__link nv-reveal nv-reveal--d2">
-        <a class="nv-arrow-link" href="https://meet.chnkukoolwal.vc">Meet Chinku <span aria-hidden="true">&rarr;</span></a>
-      </p>
+      <p class="nv-lede nv-reveal">Nuvya is founded and led by Chinku Koolwal.</p>
     </div>
   </section>
 

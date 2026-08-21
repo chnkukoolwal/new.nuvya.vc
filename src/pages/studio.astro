@@ -13,7 +13,7 @@ const process = [
   },
   {
     title: "Build",
-    body: "Use modern, AI-native development workflows to turn concepts into functioning products.",
+    body: "Turn a concept into a working product with speed and precision — velocity is a discipline the studio practices deliberately, not a shortcut it takes.",
   },
   {
     title: "Launch",
@@ -29,7 +29,7 @@ const beliefs = [
   "Small teams can build enormous things.",
   "Software should feel inevitable.",
   "Design is not decoration.",
-  "AI changes how products are made.",
+  "The fastest path is the deliberate one.",
   "The best products earn their complexity.",
   "Shipping matters more than announcing.",
 ];
@@ -51,19 +51,22 @@ const beliefs = [
     </div>
   </section>
 
-  <section class="nv-section nv-edge-top" aria-labelledby="process-heading">
-    <div class="nv-container">
-      <p id="process-heading" class="nv-sr-only">Process</p>
-      <div class="nv-process">
-        {process.map((step, i) => (
-          <div class="nv-process__step nv-reveal">
-            <span class="nv-process__numeral nv-numeral">{String(i + 1).padStart(2, "0")}</span>
-            <div>
-              <h2 class="nv-process__title">{step.title}</h2>
-              <p class="nv-lede nv-process__body">{step.body}</p>
+  <section class="nv-manifesto nv-edge-top" data-manifesto-scene aria-labelledby="process-heading">
+    <p id="process-heading" class="nv-sr-only">Process</p>
+    <div class="nv-manifesto__stage">
+      <div class="nv-container nv-container--narrow">
+        <div class="nv-manifesto__stack" data-manifesto-stack>
+          {process.map((step, i) => (
+            <div class="nv-manifesto__item">
+              <span class="nv-numeral nv-manifesto__numeral">{String(i + 1).padStart(2, "0")}</span>
+              <h2 class="nv-manifesto__title nv-gradient-text">{step.title}</h2>
+              <p class="nv-lede nv-manifesto__body">{step.body}</p>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+      </div>
+      <div class="nv-manifesto__dots" data-manifesto-dots aria-hidden="true">
+        {process.map(() => <span class="nv-manifesto__dot"></span>)}
       </div>
     </div>
   </section>

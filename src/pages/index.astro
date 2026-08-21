@@ -49,14 +49,18 @@ const structuredData = {
     </section>
   </div>
 
-  <section class="nv-philosophy nv-edge-top" id="philosophy" aria-labelledby="philosophy-heading">
-    <span class="nv-philosophy__glow" aria-hidden="true"></span>
-    <h2 id="philosophy-heading" class="nv-sr-only">Philosophy</h2>
-    <div class="nv-philosophy__inner">
-      <p class="nv-kicker nv-reveal">Philosophy</p>
-      <p class="nv-h2 nv-philosophy__statement" data-wipe>Capital invests in technology. Nuvya builds it.</p>
-    </div>
-  </section>
+  <div class="nv-philosophy-scene" data-philosophy-scene>
+    <section class="nv-philosophy nv-edge-top" id="philosophy" aria-labelledby="philosophy-heading" data-philosophy-stage>
+      <span class="nv-philosophy__glow" aria-hidden="true"></span>
+      <h2 id="philosophy-heading" class="nv-sr-only">Philosophy</h2>
+      <div class="nv-philosophy__inner">
+        <p class="nv-kicker nv-reveal">Philosophy</p>
+        <p class="nv-h2 nv-gradient-text nv-philosophy__statement" data-philosophy-text>
+          Ideas become products here.
+        </p>
+      </div>
+    </section>
+  </div>
 
   <section class="nv-section" id="products" aria-labelledby="products-heading">
     <div class="nv-container">
@@ -67,9 +71,9 @@ const structuredData = {
         </h2>
       </div>
 
-      <div class="nv-product-list" data-stagger-list>
+      <div class="nv-product-list">
         {products.map((product, i) => (
-          <a class="nv-product-row" href={`/products/${product.id}`} style={`--dot-color: ${product.data.color}`}>
+          <a class="nv-product-row" href={`/products/${product.id}`} style={`--dot-color: ${product.data.color}`} data-scroll-emerge>
             <span class="nv-product-row__wash" aria-hidden="true"></span>
             <div class="nv-product-row__grid">
               <span class="nv-product-row__index-wrap">

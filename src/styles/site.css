@@ -1,6 +1,6 @@
 /* ==========================================================================
    Site extensions — everything the teaser didn't need: real navigation,
-   footer, product listings/detail, studio process, notes, 404. Built with
+   footer, product listings/detail, studio manifesto, about, 404. Built with
    the same tokens, type system and motion vocabulary as nuvya.css so new
    pages read as the same brand, not a bolt-on section.
    ========================================================================== */
@@ -157,10 +157,9 @@
 }
 
 /* The footer as a closing title card, not a link block: a huge faded
-   wordmark resolves the whole scroll, the same oversized-echo motion used
-   in the Notes empty state (data-forming-scene/echo, generalized in
-   motion.ts) so the ending rhymes with that moment rather than
-   introducing a new device. */
+   wordmark resolves the whole scroll, using the same oversized-echo
+   scroll motion (data-forming-scene/echo, generalized in motion.ts) as
+   the rest of the site's recurring mark motif. */
 .nv-footer__echo {
   position: absolute;
   z-index: 0;
@@ -213,15 +212,6 @@
 }
 .nv-footer__bottom span { color: var(--n-white-a12); }
 
-.nv-footer__eco-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35em;
-  color: var(--n-white-a38);
-  transition: color var(--dur-fast) ease, gap var(--dur-fast) ease;
-}
-.nv-footer__eco-link:hover { color: var(--n-white-a64); gap: 0.5em; }
-
 @media (max-width: 640px) {
   .nv-footer__row { flex-direction: column; gap: var(--space-5); }
 }
@@ -248,7 +238,7 @@
   margin-bottom: var(--space-4);
 }
 
-/* ---- Page intro (studio / about / products / notes headers) ------------- */
+/* ---- Page intro (studio / about / products headers) ---------------------- */
 
 .nv-intro {
   position: relative;
@@ -612,79 +602,114 @@ a.nv-product-link-row:hover .nv-product-link-row__value {
   color: var(--n-white-a38);
 }
 
-/* ---- Studio: process sequence -------------------------------------------- */
+/* ---- Studio: pinned manifesto sequence -------------------------------------
+   .nv-manifesto is a tall track (5 stages × 100vh); .nv-manifesto__stage
+   pins via position:sticky while the five stages cross-fade, scale and
+   rise/sink through the fixed viewport based on scroll progress — one
+   sticky stage, not five stacked cards. motion.ts computes each item's
+   distance from its own "in-focus" point in the track and drives opacity/
+   transform/blur directly; only ever one (sometimes two, mid-crossfade)
+   stage is legible at a time. The numeral count + dot rail communicate
+   position in the sequence the way page numbers would in print. */
+.nv-manifesto {
+  position: relative;
+  height: 500vh;
+}
 
-.nv-process {
+.nv-manifesto__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.nv-manifesto__stack {
+  position: relative;
+  min-height: 46vh;
+}
+
+.nv-manifesto__item {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+  align-items: center;
+  text-align: center;
+  opacity: 0;
+  will-change: opacity, transform, filter;
 }
 
-.nv-process__step {
-  display: grid;
-  grid-template-columns: minmax(110px, 220px) 1fr;
-  align-items: start;
-  gap: var(--space-6) var(--space-7);
-  padding: var(--space-8) var(--space-7);
-
-  background: var(--glass-fill-soft);
-  -webkit-backdrop-filter: var(--glass-blur-soft);
-  backdrop-filter: var(--glass-blur-soft);
-  border: 1px solid var(--glass-border);
-  border-top-color: var(--glass-border-top);
-  border-radius: var(--radius-glass-lg);
-  box-shadow: var(--glass-shadow);
-  transform: scale(1);
-  transition: box-shadow var(--dur-slow) var(--ease-out), border-color var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-spatial);
-}
-.nv-process__step:hover,
-.nv-process__step.is-active {
-  box-shadow: var(--glass-shadow-hover);
-  border-color: rgba(255, 205, 240, 0.32);
-}
-.nv-process__step.is-active {
-  transform: scale(1.012);
-}
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .nv-process__step { background: rgba(21, 10, 38, 0.78); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .nv-process__step { transition-duration: 1ms; transform: none; }
+.nv-manifesto__numeral {
+  font-size: clamp(0.9rem, 0.8rem + 0.3vw, 1.05rem);
+  color: var(--n-white-a38);
+  margin-bottom: var(--space-5);
 }
 
-/* Dim by default; the active stage (scroll-gated in motion.ts) lights up
-   with the brand gradient — a spotlight moving through the sequence. */
-.nv-process__numeral {
+.nv-manifesto__title {
   font-family: var(--font-sans);
   font-weight: 300;
-  font-size: clamp(3rem, 1.6rem + 6vw, 6.5rem);
+  font-size: clamp(3rem, 1.8rem + 7vw, 7.5rem);
   line-height: 1;
-  color: var(--n-white-a12);
-  transition: color var(--dur-slow) ease, filter var(--dur-slow) ease;
-}
-.nv-process__step.is-active .nv-process__numeral {
-  color: transparent;
-  background: var(--n-iris-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  filter: drop-shadow(0 0 28px rgba(139, 60, 232, 0.3));
+  letter-spacing: -0.01em;
 }
 
-.nv-process__title {
-  font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: clamp(1.4rem, 1.2rem + 1.4vw, 2rem);
-  letter-spacing: -0.005em;
-  color: var(--n-white);
+.nv-manifesto__body {
+  margin-top: var(--space-6);
+  max-width: 46ch;
+  font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.3rem);
 }
 
-.nv-process__body {
-  margin-top: var(--space-3);
-  max-width: 56ch;
+.nv-manifesto__dots {
+  position: absolute;
+  bottom: clamp(var(--space-6), 6vh, var(--space-8));
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: var(--space-3);
+}
+.nv-manifesto__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--n-white-a12);
+  transition: background-color var(--dur-base) ease, box-shadow var(--dur-base) ease, transform var(--dur-base) ease;
+}
+.nv-manifesto__dot.is-active {
+  background: var(--n-magenta-hot);
+  box-shadow: 0 0 12px rgba(255, 79, 176, 0.6);
+  transform: scale(1.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nv-manifesto { height: auto; }
+  .nv-manifesto__stage {
+    position: relative;
+    height: auto;
+    padding-block: var(--space-9);
+    display: block;
+  }
+  .nv-manifesto__stack {
+    position: static;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-9);
+  }
+  .nv-manifesto__item {
+    position: static;
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+  .nv-manifesto__dots { display: none; }
 }
 
 @media (max-width: 640px) {
-  .nv-process__step { grid-template-columns: 1fr; gap: var(--space-3); }
+  .nv-manifesto__stack { min-height: 56vh; }
 }
 
 /* ---- Studio: beliefs ------------------------------------------------------- */
@@ -724,64 +749,49 @@ a.nv-product-link-row:hover .nv-product-link-row__value {
   .nv-beliefs .nv-belief--offset { margin-left: 0; }
 }
 
-/* ---- About ------------------------------------------------------------------ */
+/* ---- About: principle cards ------------------------------------------------- */
 
-.nv-about__lede {
-  max-width: 62ch;
-  margin-top: var(--space-6);
-}
-.nv-about__lede + .nv-about__lede { margin-top: var(--space-4); }
-
-.nv-about__link {
-  margin-top: var(--space-7);
-}
-
-/* ---- Notes: empty state + list --------------------------------------------- */
-
-.nv-notes-empty {
-  max-width: 520px;
-}
-
-.nv-note-list { display: flex; flex-direction: column; gap: var(--space-4); }
-.nv-note-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+.nv-about-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--space-5);
-  padding: var(--space-5) var(--space-6);
+}
 
+.nv-about-card {
+  padding: clamp(var(--space-7), 5vw, var(--space-8));
   background: var(--glass-fill-soft);
   -webkit-backdrop-filter: var(--glass-blur-soft);
   backdrop-filter: var(--glass-blur-soft);
   border: 1px solid var(--glass-border);
   border-top-color: var(--glass-border-top);
-  border-radius: var(--radius-glass);
+  border-radius: var(--radius-glass-lg);
   box-shadow: var(--glass-shadow);
-  transition: box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
 }
-.nv-note-row:hover {
-  box-shadow: var(--glass-shadow-hover);
-  border-color: rgba(255, 255, 255, 0.24);
-}
-.nv-note-row__title {
-  font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: clamp(1.1rem, 1rem + 0.6vw, 1.4rem);
-  color: var(--n-white);
-  transition: color var(--dur-fast) ease;
-}
-.nv-note-row:hover .nv-note-row__title { color: var(--n-lavender); }
-.nv-note-row__date { white-space: nowrap; }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .nv-note-row { background: rgba(21, 10, 38, 0.78); }
+  .nv-about-card { background: rgba(21, 10, 38, 0.78); }
 }
 
-.nv-note-article { padding-block: calc(var(--topbar-h) + var(--space-9)) var(--space-10); }
-.nv-note-article__inner { max-width: 680px; }
-.nv-note-article__body { margin-top: var(--space-7); }
-.nv-note-article__body p { max-width: none; color: var(--n-white-a64); font-size: 1.0625rem; line-height: 1.85; margin-bottom: var(--space-5); }
-.nv-note-article__body h2 { font-family: var(--font-sans); font-weight: 400; font-size: 1.5rem; color: var(--n-white); margin: var(--space-7) 0 var(--space-4); }
-.nv-note-article__body a { color: var(--n-lavender); border-bottom: 1px solid var(--n-purple-a50); }
+.nv-about-card__numeral {
+  display: block;
+  font-size: clamp(1.6rem, 1.2rem + 2vw, 2.5rem);
+  color: var(--n-white-a12);
+  margin-bottom: var(--space-3);
+}
+
+.nv-about-card__heading {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: clamp(1.3rem, 1.1rem + 1vw, 1.75rem);
+  color: var(--n-white);
+}
+
+.nv-about-card__body {
+  margin-top: var(--space-3);
+}
+
+@media (max-width: 760px) {
+  .nv-about-grid { grid-template-columns: 1fr; }
+}
 
 /* ---- 404 -------------------------------------------------------------------- */
 

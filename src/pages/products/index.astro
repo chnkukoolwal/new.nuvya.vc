@@ -27,9 +27,9 @@ const products = (await getCollection("products")).sort((a, b) => a.data.order -
 
   <section class="nv-section nv-section--tight nv-edge-top" aria-label="Product list">
     <div class="nv-container">
-      <div class="nv-product-list" data-stagger-list>
+      <div class="nv-product-list">
         {products.map((product, i) => (
-          <a class="nv-product-row" href={`/products/${product.id}`} style={`--dot-color: ${product.data.color}`}>
+          <a class="nv-product-row" href={`/products/${product.id}`} style={`--dot-color: ${product.data.color}`} data-scroll-emerge>
             <span class="nv-product-row__wash" aria-hidden="true"></span>
             <div class="nv-product-row__grid">
               <span class="nv-product-row__index-wrap">

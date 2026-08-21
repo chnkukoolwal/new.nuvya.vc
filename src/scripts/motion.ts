@@ -135,9 +135,8 @@
      by the radial-gradient highlight in nuvya.css. One shared listener per
      element, only on hover-capable pointers, so it costs nothing on touch. */
   const GLASS_SELECTOR =
-    ".nv-topbar__row, .nv-product-row, .nv-process__step, " +
-    ".nv-note-row, .nv-close__inner, .nv-belief, .nv-404__panel, " +
-    ".nv-forming__inner, .nv-product-section__inner";
+    ".nv-topbar__row, .nv-product-row, " +
+    ".nv-close__inner, .nv-belief, .nv-404__panel, .nv-product-section__inner, .nv-about-card";
   if (canHover && !reduceMotion) {
     document.querySelectorAll<HTMLElement>(GLASS_SELECTOR).forEach(function (surface) {
       surface.addEventListener(
@@ -266,6 +265,50 @@
     makeScrollScene(scene, render);
   })();
 
+  /* Philosophy — the second pinned scene, immediately following the hero's.
+     .nv-philosophy-scene is a 220svh track; the statement scales in from an
+     oversized blur (0-0.4), holds legible (0.4-0.6), then scales down and
+     dissolves upward as the visitor keeps scrolling (0.6-1) — an emergence
+     and a dissolve, not a fade-up, so the hero-to-philosophy transition
+     reads as one continuous camera move rather than two stacked sections. */
+  (function philosophyScene() {
+    const scene = document.querySelector<HTMLElement>("[data-philosophy-scene]");
+    const text = document.querySelector<HTMLElement>("[data-philosophy-text]");
+    if (!scene || !text) return;
+
+    const render = function () {
+      const rect = scene.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const total = rect.height - vh;
+      const progress = total > 0 ? clamp01(-rect.top / total) : 0;
+
+      let scale: number, blur: number, opacity: number, translate: number;
+      if (progress < 0.4) {
+        const t = progress / 0.4;
+        scale = 1.35 - t * 0.35;
+        blur = 16 * (1 - t);
+        opacity = t;
+        translate = 0;
+      } else if (progress < 0.6) {
+        scale = 1;
+        blur = 0;
+        opacity = 1;
+        translate = 0;
+      } else {
+        const t = (progress - 0.6) / 0.4;
+        scale = 1 - t * 0.12;
+        blur = t * 10;
+        opacity = 1 - t;
+        translate = -t * 40;
+      }
+      text.style.opacity = opacity.toFixed(3);
+      text.style.filter = "blur(" + blur.toFixed(2) + "px)";
+      text.style.transform = "scale(" + scale.toFixed(4) + ") translateY(" + translate.toFixed(2) + "px)";
+    };
+
+    makeScrollScene(scene, render);
+  })();
+
   /* Wipe statements — a left-to-right mask reveal on any [data-wipe]
      element, tied to how far its own bounding box has crossed a band in
      the upper viewport. Generalized so every page can use this, not just
@@ -280,10 +323,32 @@
     makeScrollScene(statement, render);
   });
 
+  /* Scroll-emerge — a continuous, scroll-scrubbed entrance for anything
+     flagged [data-scroll-emerge]: opacity, scale and blur are all a direct
+     function of how far the element has crossed a band near the bottom of
+     the viewport, computed fresh every frame. Unlike .nv-reveal (a one-shot
+     fade that plays once and is done), this reverses exactly if the visitor
+     scrolls back up — the element is always wherever its own scroll math
+     says it should be. Used for products and the About principles, where
+     the brief calls for "scroll controls the composition" rather than a
+     fade transported in from a generic component library. */
+  document.querySelectorAll<HTMLElement>("[data-scroll-emerge]").forEach(function (el) {
+    if (reduceMotion) return;
+    const render = function () {
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const progress = clamp01((vh * 0.92 - rect.top) / (vh * 0.52));
+      el.style.opacity = progress.toFixed(3);
+      el.style.filter = "blur(" + ((1 - progress) * 8).toFixed(2) + "px)";
+      el.style.transform =
+        "scale(" + (0.94 + progress * 0.06).toFixed(4) + ") translateY(" + ((1 - progress) * 24).toFixed(2) + "px)";
+    };
+    makeScrollScene(el, render);
+  });
+
   /* Forming echo — the oversized mark drifts through a slow rotate and
      scale as its section crosses the viewport. Generalized to every
-     [data-forming-scene] on the page (footer + notes empty state both use
-     it), reinforcing "the same structure recurring" wherever it appears. */
+     [data-forming-scene] on the page, currently just the footer. */
   document.querySelectorAll<HTMLElement>("[data-forming-scene]").forEach(function (section) {
     const echo = section.querySelector<HTMLElement>("[data-forming-echo]");
     if (!echo) return;
@@ -299,28 +364,65 @@
     makeScrollScene(section, render);
   });
 
-  /* Studio process — as each stage crosses the centre band of the
-     viewport it becomes the "active" one: its numeral lights up with the
-     brand gradient and the step lifts very slightly. Only one (sometimes
-     two, mid-transition) stage is ever active at once, so scrolling reads
-     as moving a spotlight through the sequence rather than a static list
-     that merely faded in. */
-  (function studioKinetic() {
-    const steps = document.querySelectorAll<HTMLElement>(".nv-process__step");
-    if (!steps.length) return;
+  /* Studio manifesto — the pinned scroll sequence. .nv-manifesto is a tall
+     track (stages × 100vh); .nv-manifesto__stage pins via position:sticky
+     while scroll progress across the whole track is mapped onto n-1 evenly
+     spaced "in-focus" points, one per stage. Each stage's opacity/blur/
+     scale/position is a direct function of its own distance from that
+     point — so at any moment either exactly one stage is in sharp focus or
+     two are mid-crossfade, and scrolling up runs the sequence in reverse.
+     The dot rail mirrors the same "which stage is active" state. */
+  (function manifestoScene() {
+    const scene = document.querySelector<HTMLElement>("[data-manifesto-scene]");
+    const stack = document.querySelector<HTMLElement>("[data-manifesto-stack]");
+    const dotsWrap = document.querySelector<HTMLElement>("[data-manifesto-dots]");
+    if (!scene || !stack) return;
+
+    const items = Array.from(stack.children) as HTMLElement[];
+    const dots = dotsWrap ? (Array.from(dotsWrap.children) as HTMLElement[]) : [];
+    const n = items.length;
+    if (!n) return;
+
     if (reduceMotion || !("IntersectionObserver" in window)) {
-      steps.forEach(function (step) { step.classList.add("is-active"); });
+      items.forEach(function (el) { el.style.opacity = "1"; });
       return;
     }
-    const stepObserver = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          entry.target.classList.toggle("is-active", entry.isIntersecting);
-        });
-      },
-      { rootMargin: "-42% 0px -42% 0px", threshold: 0 }
-    );
-    steps.forEach(function (step) { stepObserver.observe(step); });
+
+    const span = Math.max(n - 1, 1);
+
+    const render = function () {
+      const rect = scene.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const total = rect.height - vh;
+      const progress = total > 0 ? clamp01(-rect.top / total) : 0;
+      const pos = progress * span;
+
+      let activeIdx = 0;
+      let activeVis = -1;
+
+      items.forEach(function (item, i) {
+        const distance = pos - i;
+        const vis = clamp01(1 - Math.abs(distance) / 0.62);
+        const blur = (1 - vis) * 10;
+        const scale = 0.92 + vis * 0.08;
+        const translate = distance * 55;
+
+        item.style.opacity = vis.toFixed(3);
+        item.style.filter = "blur(" + blur.toFixed(2) + "px)";
+        item.style.transform = "translateY(" + translate.toFixed(2) + "px) scale(" + scale.toFixed(4) + ")";
+
+        if (vis > activeVis) {
+          activeVis = vis;
+          activeIdx = i;
+        }
+      });
+
+      dots.forEach(function (dot, i) {
+        dot.classList.toggle("is-active", i === activeIdx);
+      });
+    };
+
+    makeScrollScene(scene, render);
   })();
 
   /* Product / process rows — a subtle staggered rise as a list scrolls

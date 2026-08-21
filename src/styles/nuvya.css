@@ -179,26 +179,22 @@
    defaults to a resting top-centre glint when nothing is tracking it. */
 .nv-topbar__row,
 .nv-product-row,
-.nv-process__step,
-.nv-note-row,
 .nv-close__inner,
 .nv-belief,
 .nv-404__panel,
-.nv-forming__inner,
-.nv-product-section__inner {
+.nv-product-section__inner,
+.nv-about-card {
   position: relative;
   --pointer-x: 50%;
   --pointer-y: 0%;
 }
 .nv-topbar__row::after,
 .nv-product-row::after,
-.nv-process__step::after,
-.nv-note-row::after,
 .nv-close__inner::after,
 .nv-belief::after,
 .nv-404__panel::after,
-.nv-forming__inner::after,
-.nv-product-section__inner::after {
+.nv-product-section__inner::after,
+.nv-about-card::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -210,25 +206,21 @@
 }
 .nv-topbar__row:hover::after,
 .nv-product-row:hover::after,
-.nv-process__step:hover::after,
-.nv-note-row:hover::after,
 .nv-close__inner:hover::after,
 .nv-belief:hover::after,
 .nv-404__panel:hover::after,
-.nv-forming__inner:hover::after,
-.nv-product-section__inner:hover::after {
+.nv-product-section__inner:hover::after,
+.nv-about-card:hover::after {
   opacity: 1;
 }
 @media (prefers-reduced-motion: reduce) {
   .nv-topbar__row::after,
   .nv-product-row::after,
-  .nv-process__step::after,
-  .nv-note-row::after,
   .nv-close__inner::after,
   .nv-belief::after,
   .nv-404__panel::after,
-  .nv-forming__inner::after,
-  .nv-product-section__inner::after {
+  .nv-product-section__inner::after,
+  .nv-about-card::after {
     display: none;
   }
 }
@@ -817,13 +809,30 @@ h1, h2, h3, p { margin: 0; }
   .nv-reveal { transition-duration: 1ms; transform: none; }
 }
 
-/* ---- Section: philosophy / any wipe-statement section ------------------- */
+/* ---- Section: philosophy — a pinned scene, not a static block -----------
+   .nv-philosophy-scene is a tall track (220vh); .nv-philosophy pins via
+   position:sticky while the statement itself scales in from an oversized
+   blur, holds, then scales down and dissolves as the visitor keeps
+   scrolling — the same pin/progress mechanism as the hero, so the hero's
+   recede and the philosophy's emergence read as one continuous move
+   rather than two unrelated sections stacked on top of each other. */
+
+.nv-philosophy-scene {
+  position: relative;
+  height: 220vh;
+}
 
 .nv-philosophy {
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 1;
-  padding-block: var(--space-10);
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
+  padding-inline: var(--gutter);
 }
 
 /* A concentrated light source behind the statement — the hero's glow
@@ -843,13 +852,24 @@ h1, h2, h3, p { margin: 0; }
 
 .nv-philosophy__inner {
   position: relative;
-  max-width: 640px;
+  max-width: 720px;
   margin-inline: auto;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-5);
+}
+
+.nv-philosophy__statement {
+  opacity: 0;
+  will-change: opacity, transform, filter;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nv-philosophy-scene { height: auto; }
+  .nv-philosophy { position: relative; height: auto; padding-block: var(--space-10); }
+  .nv-philosophy__statement { opacity: 1; filter: none; transform: none; }
 }
 
 /* ---- Studio teaser: kinetic word sequence -------------------------------
@@ -892,75 +912,17 @@ h1, h2, h3, p { margin: 0; }
   [data-wipe] { -webkit-mask-image: none; mask-image: none; }
 }
 
-/* ---- Section: forming / oversized echo mark ------------------------------ */
-
-.nv-forming {
-  position: relative;
-  z-index: 1;
-  padding-block: var(--space-10);
-  overflow: hidden;
+/* Scroll-emerge base state — motion.ts overwrites opacity/filter/transform
+   inline every frame as the element crosses the lower viewport band; this
+   is just the starting condition before that listener's first tick. */
+[data-scroll-emerge] {
+  opacity: 0;
+  filter: blur(8px);
+  transform: scale(0.94) translateY(24px);
+  will-change: opacity, transform, filter;
 }
-
-.nv-forming__inner {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-4);
-  max-width: 620px;
-  margin-inline: auto;
-  padding: var(--space-9) var(--space-7);
-
-  background: var(--glass-fill);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-top-color: var(--glass-border-top);
-  border-radius: var(--radius-glass-lg);
-  box-shadow: var(--glass-shadow), 0 0 90px rgba(139, 60, 232, 0.14);
-}
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .nv-forming__inner { background: rgba(21, 10, 38, 0.82); }
-}
-
-.nv-forming__statement {
-  font-family: var(--font-sans);
-  font-weight: 300;
-  font-size: clamp(1.6rem, 1.3rem + 2vw, 2.75rem);
-  letter-spacing: -0.01em;
-  color: var(--n-white);
-  max-width: 16ch;
-}
-
-.nv-forming__meta {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-2);
-  color: var(--n-white-a38);
-  font-size: 0.8125rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-.nv-forming__meta span { color: var(--n-white-a12); }
-
-/* Oversized echo of the mark, mostly cropped, almost invisible — the same
-   structure recurring, not a new decoration. motion.js drives a slow
-   rotate/scale on this as the section crosses the viewport. */
-.nv-forming__echo {
-  position: absolute;
-  z-index: 0;
-  top: 50%;
-  left: 50%;
-  width: clamp(360px, 52vw, 760px);
-  height: auto;
-  transform: translate(-50%, -46%);
-  -webkit-mask-image: radial-gradient(ellipse 42% 42% at 50% 50%, #000 0%, transparent 100%);
-  mask-image: radial-gradient(ellipse 42% 42% at 50% 50%, #000 0%, transparent 100%);
-  opacity: 0.05;
-  pointer-events: none;
-  will-change: transform;
+@media (prefers-reduced-motion: reduce) {
+  [data-scroll-emerge] { opacity: 1; filter: none; transform: none; }
 }
 
 /* ---- Edge illumination ----------------------------------------------------
@@ -1091,10 +1053,6 @@ h1, h2, h3, p { margin: 0; }
   .nv-hero { padding-top: calc(var(--topbar-h) + var(--space-6)); }
   .nv-hero__statement { max-width: 17ch; }
   .nv-close__foot { flex-direction: column; gap: var(--space-1); text-align: center; }
-}
-
-@media (max-width: 380px) {
-  .nv-forming__statement { max-width: 12ch; }
 }
 
 @media (min-width: 1600px) {
