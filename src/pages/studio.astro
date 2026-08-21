@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CloseCTA from "../components/CloseCTA.astro";
+import BackLink from "../components/BackLink.astro";
 
 const process = [
   {
@@ -42,6 +43,7 @@ const beliefs = [
   <section class="nv-intro">
     <div class="nv-container">
       <div class="nv-intro__inner">
+        <BackLink href="/" label="Nuvya" />
         <p class="nv-kicker nv-reveal">Studio</p>
         <h1 class="nv-display nv-gradient-text nv-reveal nv-reveal--d1" style="margin-top: var(--space-3);">We build.</h1>
         <p class="nv-h2 nv-intro__statement" data-wipe>

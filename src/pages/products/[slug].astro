@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import CloseCTA from "../../components/CloseCTA.astro";
+import BackLink from "../../components/BackLink.astro";
 
 export async function getStaticPaths() {
   const products = await getCollection("products");
@@ -56,6 +57,7 @@ const structuredData = {
 >
   <section class="nv-product-hero nv-container">
     <div class="nv-product-hero__inner">
+      <BackLink href="/products" label="Products" />
       {data.heroImage && (
         <span class="nv-product-hero__icon-holder nv-reveal" style={`--dot-color: ${data.color}`}>
           <img class="nv-product-hero__icon" src={data.heroImage} alt="" width="88" height="88" loading="eager" />

@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import CloseCTA from "../../components/CloseCTA.astro";
+import BackLink from "../../components/BackLink.astro";
 
 const products = (await getCollection("products")).sort((a, b) => a.data.order - b.data.order);
 ---
@@ -13,6 +14,7 @@ const products = (await getCollection("products")).sort((a, b) => a.data.order -
   <section class="nv-intro">
     <div class="nv-container">
       <div class="nv-intro__inner">
+        <BackLink href="/" label="Nuvya" />
         <p class="nv-kicker nv-reveal">Products</p>
         <h1 class="nv-display nv-gradient-text nv-reveal nv-reveal--d1" style="margin-top: var(--space-3);">
           What we've built.
