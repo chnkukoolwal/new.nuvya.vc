@@ -55,18 +55,23 @@ const structuredData = {
       <h2 id="philosophy-heading" class="nv-sr-only">Philosophy</h2>
       <div class="nv-philosophy__inner">
         <p class="nv-kicker nv-reveal">Philosophy</p>
-        <p class="nv-h2 nv-gradient-text nv-philosophy__statement" data-philosophy-text>
-          Ideas become products here.
-        </p>
+        <div class="nv-philosophy__crossfade">
+          <p class="nv-h2 nv-gradient-text nv-philosophy__statement" data-philosophy-text>
+            Ideas become products here.
+          </p>
+          <p class="nv-h2 nv-gradient-text nv-philosophy__bridge" data-philosophy-bridge aria-hidden="true">
+            The result.
+          </p>
+        </div>
       </div>
     </section>
   </div>
 
   <section class="nv-section" id="products" aria-labelledby="products-heading">
     <div class="nv-container">
-      <div class="nv-section__head">
-        <p class="nv-kicker nv-reveal">Products</p>
-        <h2 id="products-heading" class="nv-display nv-reveal nv-reveal--d1" style="margin-top: var(--space-3);">
+      <div class="nv-section__head" data-scroll-emerge>
+        <p class="nv-kicker">Products</p>
+        <h2 id="products-heading" class="nv-display" style="margin-top: var(--space-3);">
           Selected Products
         </h2>
       </div>

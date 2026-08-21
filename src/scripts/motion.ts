@@ -287,43 +287,85 @@
   })();
 
   /* Philosophy — the second pinned scene, immediately following the hero's.
-     .nv-philosophy-scene is a 220svh track; the statement scales in from an
-     oversized blur (0-0.4), holds legible (0.4-0.6), then scales down and
-     dissolves upward as the visitor keeps scrolling (0.6-1) — an emergence
-     and a dissolve, not a fade-up, so the hero-to-philosophy transition
-     reads as one continuous camera move rather than two stacked sections. */
+     .nv-philosophy-scene is a 220svh track. Two tunings that were off
+     before:
+
+     1) Lead time. Reading progress as a plain function of the track's own
+        rect.top means it stays at exactly 0 — statement fully invisible —
+        until the track has *already* reached the top of the screen. On a
+        short phone viewport that reads as the site catching up with the
+        scroll rather than leading it. `lead` shifts the zero point earlier
+        by up to ~0.85 viewport-heights, so the emergence is already well
+        underway while the hero is still receding above it, and by the
+        time the track actually reaches the top the statement is already
+        in its hold phase — present, not arriving.
+     2) The bridge. Once the statement dissolves (0.55-1 of progress), a
+        second line — "The result." — cross-fades into the exact same
+        spot, holds, then dissolves itself, so idea → creation → product
+        plays out as one continuous move into Products rather than two
+        independent sections with nothing between them. */
   (function philosophyScene() {
     const scene = document.querySelector<HTMLElement>("[data-philosophy-scene]");
     const text = document.querySelector<HTMLElement>("[data-philosophy-text]");
+    const bridge = document.querySelector<HTMLElement>("[data-philosophy-bridge]");
     if (!scene || !text) return;
 
     const render = function () {
       const rect = scene.getBoundingClientRect();
       const total = rect.height - vh;
-      const progress = total > 0 ? clamp01(-rect.top / total) : 0;
+      const lead = vh * 0.85;
+      const progress = total > 0 ? clamp01((lead - rect.top) / (total + lead)) : 0;
 
       let scale: number, blur: number, opacity: number, translate: number;
-      if (progress < 0.4) {
-        const t = progress / 0.4;
-        scale = 1.35 - t * 0.35;
-        blur = 16 * (1 - t);
+      if (progress < 0.28) {
+        const t = progress / 0.28;
+        scale = 1.3 - t * 0.3;
+        blur = 14 * (1 - t);
         opacity = t;
         translate = 0;
-      } else if (progress < 0.6) {
+      } else if (progress < 0.55) {
         scale = 1;
         blur = 0;
         opacity = 1;
         translate = 0;
       } else {
-        const t = (progress - 0.6) / 0.4;
-        scale = 1 - t * 0.12;
-        blur = t * 10;
-        opacity = 1 - t;
-        translate = -t * 40;
+        const t = clamp01((progress - 0.55) / 0.45);
+        scale = 1 - Math.min(t / 0.4, 1) * 0.3;
+        blur = Math.min(t / 0.4, 1) * 10;
+        opacity = clamp01(1 - t / 0.4);
+        translate = -t * 50;
       }
       text.style.opacity = opacity.toFixed(3);
       text.style.filter = "blur(" + blur.toFixed(2) + "px)";
       text.style.transform = "scale(" + scale.toFixed(4) + ") translateY(" + translate.toFixed(2) + "px)";
+
+      if (bridge) {
+        let bOpacity = 0;
+        let bScale = 0.92;
+        let bTranslate = 16;
+        if (progress >= 0.55) {
+          const t = (progress - 0.55) / 0.45;
+          if (t < 0.3) {
+            bOpacity = 0;
+          } else if (t < 0.55) {
+            const bt = (t - 0.3) / 0.25;
+            bOpacity = bt;
+            bScale = 0.92 + bt * 0.08;
+            bTranslate = 16 * (1 - bt);
+          } else if (t < 0.8) {
+            bOpacity = 1;
+            bScale = 1;
+            bTranslate = 0;
+          } else {
+            const bt = (t - 0.8) / 0.2;
+            bOpacity = 1 - bt;
+            bScale = 1 - bt * 0.06;
+            bTranslate = -bt * 20;
+          }
+        }
+        bridge.style.opacity = bOpacity.toFixed(3);
+        bridge.style.transform = "scale(" + bScale.toFixed(4) + ") translateY(" + bTranslate.toFixed(2) + "px)";
+      }
     };
 
     makeScrollScene(scene, render);

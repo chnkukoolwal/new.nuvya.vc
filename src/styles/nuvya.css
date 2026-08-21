@@ -892,7 +892,17 @@ h1, h2, h3, p { margin: 0; }
   height: 220svh;
 }
 
-.nv-philosophy {
+/* section.nv-philosophy (not plain .nv-philosophy): this element also
+   carries .nv-edge-top for the decorative top hairline, and that utility
+   sets its own `position: relative` with equal (0,1,0) specificity — file
+   order alone would let whichever rule comes later silently win. That's
+   exactly what was happening here: .nv-edge-top is defined further down
+   this file, so position:sticky was being overridden back to relative on
+   every render, and the "pinned" philosophy scene was never actually
+   pinned in any browser. The tag qualifier bumps this rule's specificity
+   so position:sticky always wins regardless of what else is combined
+   with it or where that rule sits in the cascade. */
+section.nv-philosophy {
   position: sticky;
   top: 0;
   z-index: 1;
@@ -931,15 +941,40 @@ h1, h2, h3, p { margin: 0; }
   gap: var(--space-5);
 }
 
+/* The bridge line ("The result.") occupies the exact same spot as the
+   statement, cross-fading in as it dissolves out — the idea → creation
+   handoff into Products happens inside this one pinned moment rather than
+   as a second, separate section. */
+.nv-philosophy__crossfade {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.6em;
+  width: 100%;
+}
+
 .nv-philosophy__statement {
   opacity: 0;
   will-change: opacity, transform, filter;
 }
 
+.nv-philosophy__bridge {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .nv-philosophy-scene { height: auto; }
-  .nv-philosophy { position: relative; height: auto; padding-block: var(--space-10); }
+  section.nv-philosophy { position: relative; height: auto; padding-block: var(--space-10); }
   .nv-philosophy__statement { opacity: 1; filter: none; transform: none; }
+  .nv-philosophy__bridge { display: none; }
 }
 
 /* ---- Studio teaser: kinetic word sequence -------------------------------
