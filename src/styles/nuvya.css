@@ -57,15 +57,15 @@
   --n-lavender: #c9aee6;
   --n-pink: #f2b8dd;
   --n-pink-soft: #ffd6ee;
-  --n-purple: #a06adf; /* midpoint accent — links, focus rings, small ui */
+  --n-purple: #ae5fdc; /* midpoint accent — links, focus rings, small ui — warmed slightly toward magenta for a more even violet/pink balance */
 
   --n-white-a64: rgba(246, 242, 248, 0.64);
   --n-white-a38: rgba(246, 242, 248, 0.38);
   --n-white-a12: rgba(246, 242, 248, 0.12);
   --n-white-a06: rgba(246, 242, 248, 0.06);
-  --n-purple-a50: rgba(160, 106, 223, 0.5);
-  --n-purple-a20: rgba(160, 106, 223, 0.2);
-  --n-magenta-a40: rgba(240, 166, 203, 0.4);
+  --n-purple-a50: rgba(174, 95, 220, 0.46);
+  --n-purple-a20: rgba(174, 95, 220, 0.2);
+  --n-magenta-a40: rgba(240, 166, 203, 0.46);
 
   /* Iridescent gradient family — the wordmark gradient extended into a
      4-stop sweep (violet → magenta → pink → lavender) used anywhere the
@@ -103,17 +103,19 @@
      Nuvya's own material — Apple's Liquid Glass (frosted translucency,
      specular edge, depth) with every neutral swapped for a violet/magenta
      tint, so the surface itself reads as Nuvya rather than "dark UI with a
-     pink accent". The fill is warm violet at the base, the top edge and
-     specular catch pink/magenta light, and the shadow carries a soft
-     colour bloom instead of flat black. */
-  --glass-fill: linear-gradient(165deg, rgba(210, 170, 255, 0.16) 0%, rgba(255, 140, 210, 0.05) 50%, rgba(180, 120, 255, 0.09) 100%);
-  --glass-fill-soft: linear-gradient(165deg, rgba(210, 170, 255, 0.1) 0%, rgba(255, 140, 210, 0.03) 55%, rgba(180, 120, 255, 0.06) 100%);
+     pink accent". Colour-graded for an even violet/pink balance: the pink
+     mid-stop in the fill now carries as much weight as the violet
+     bookends, and the ambient bloom is a violet-magenta blend rather than
+     pure violet — the same material, same blur/transparency/shadow
+     structure, just regraded. */
+  --glass-fill: linear-gradient(165deg, rgba(210, 170, 255, 0.145) 0%, rgba(255, 140, 210, 0.09) 50%, rgba(190, 130, 255, 0.09) 100%);
+  --glass-fill-soft: linear-gradient(165deg, rgba(210, 170, 255, 0.095) 0%, rgba(255, 140, 210, 0.055) 55%, rgba(190, 130, 255, 0.06) 100%);
   --glass-border: rgba(214, 176, 255, 0.22);
-  --glass-border-top: rgba(255, 205, 240, 0.55);
+  --glass-border-top: rgba(255, 190, 235, 0.56);
   --glass-blur: blur(22px) saturate(165%);
   --glass-blur-soft: blur(14px) saturate(145%);
-  --glass-shadow: 0 1px 1px rgba(255, 220, 250, 0.16) inset, 0 20px 55px rgba(6, 0, 20, 0.55), 0 0 42px rgba(139, 60, 232, 0.14), 0 0 0 1px rgba(240, 120, 210, 0.1);
-  --glass-shadow-hover: 0 1px 1px rgba(255, 225, 250, 0.22) inset, 0 26px 70px rgba(6, 0, 20, 0.58), 0 0 0 1px rgba(240, 130, 215, 0.22), 0 0 46px rgba(255, 79, 176, 0.22), 0 0 90px rgba(139, 60, 232, 0.22);
+  --glass-shadow: 0 1px 1px rgba(255, 220, 250, 0.16) inset, 0 20px 55px rgba(6, 0, 20, 0.55), 0 0 42px rgba(190, 60, 200, 0.15), 0 0 0 1px rgba(240, 120, 210, 0.1);
+  --glass-shadow-hover: 0 1px 1px rgba(255, 225, 250, 0.22) inset, 0 26px 70px rgba(6, 0, 20, 0.58), 0 0 0 1px rgba(240, 130, 215, 0.22), 0 0 46px rgba(255, 79, 176, 0.24), 0 0 90px rgba(139, 60, 232, 0.2);
   --glass-specular: radial-gradient(circle at var(--pointer-x, 50%) var(--pointer-y, 0%), rgba(255, 224, 248, 0.28), transparent 45%);
 
   --radius-glass-sm: 14px;
@@ -131,13 +133,13 @@
      glass than a tinted card. Content surfaces (product cards, panels,
      CTAs) keep the more vivid --glass-fill; chrome should feel related to
      them, not identical. */
-  --glass-chrome-fill: linear-gradient(165deg, rgba(214, 176, 255, 0.1) 0%, rgba(255, 140, 210, 0.035) 55%, rgba(180, 120, 255, 0.055) 100%);
-  --glass-chrome-fill-active: linear-gradient(165deg, rgba(214, 176, 255, 0.16) 0%, rgba(255, 140, 210, 0.05) 55%, rgba(180, 120, 255, 0.08) 100%);
+  --glass-chrome-fill: linear-gradient(165deg, rgba(214, 176, 255, 0.095) 0%, rgba(255, 140, 210, 0.05) 55%, rgba(190, 130, 255, 0.055) 100%);
+  --glass-chrome-fill-active: linear-gradient(165deg, rgba(214, 176, 255, 0.15) 0%, rgba(255, 140, 210, 0.07) 55%, rgba(190, 130, 255, 0.08) 100%);
   --glass-chrome-border: rgba(224, 196, 255, 0.13);
-  --glass-chrome-border-top: rgba(255, 224, 245, 0.28);
+  --glass-chrome-border-top: rgba(255, 210, 240, 0.3);
   --glass-chrome-blur: blur(20px) saturate(140%);
-  --glass-chrome-shadow: 0 1px 1px rgba(255, 220, 250, 0.09) inset, 0 14px 36px rgba(6, 0, 20, 0.48), 0 0 0 1px rgba(240, 120, 210, 0.06);
-  --glass-chrome-shadow-hover: 0 1px 1px rgba(255, 225, 250, 0.13) inset, 0 18px 44px rgba(6, 0, 20, 0.5), 0 0 0 1px rgba(240, 130, 215, 0.1);
+  --glass-chrome-shadow: 0 1px 1px rgba(255, 220, 250, 0.09) inset, 0 14px 36px rgba(6, 0, 20, 0.48), 0 0 0 1px rgba(240, 110, 205, 0.07);
+  --glass-chrome-shadow-hover: 0 1px 1px rgba(255, 225, 250, 0.13) inset, 0 18px 44px rgba(6, 0, 20, 0.5), 0 0 0 1px rgba(240, 130, 215, 0.11);
 }
 
 /* backdrop-filter is real GPU/compositing cost, multiplied by every glass
@@ -355,7 +357,7 @@ h1, h2, h3, p { margin: 0; }
   width: min(1000px, 130vw);
   height: min(1000px, 130vw);
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(139, 60, 232, 0.32) 0%, rgba(255, 79, 176, 0.1) 40%, transparent 70%);
+  background: radial-gradient(circle, rgba(139, 60, 232, 0.26) 0%, rgba(255, 79, 176, 0.16) 40%, transparent 70%);
   filter: blur(10px);
   animation: nv-drift 34s var(--ease-in-out) infinite alternate;
   will-change: transform;
@@ -368,7 +370,7 @@ h1, h2, h3, p { margin: 0; }
   width: min(760px, 90vw);
   height: min(760px, 90vw);
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(255, 79, 176, 0.22) 0%, rgba(139, 60, 232, 0.08) 45%, transparent 72%);
+  background: radial-gradient(circle, rgba(255, 79, 176, 0.24) 0%, rgba(139, 60, 232, 0.1) 45%, transparent 72%);
   filter: blur(14px);
   animation: nv-drift-alt 46s var(--ease-in-out) infinite alternate;
   will-change: transform;
@@ -381,7 +383,7 @@ h1, h2, h3, p { margin: 0; }
   left: 10%;
   width: min(1200px, 150vw);
   height: 560px;
-  background: radial-gradient(ellipse, rgba(201, 174, 230, 0.14) 0%, transparent 70%);
+  background: radial-gradient(ellipse, rgba(220, 168, 220, 0.14) 0%, transparent 70%);
   filter: blur(20px);
   animation: nv-drift-wash 60s linear infinite alternate;
 }
@@ -482,7 +484,7 @@ h1, h2, h3, p { margin: 0; }
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent !important;
-  filter: drop-shadow(0 0 46px rgba(139, 60, 232, 0.32)) drop-shadow(0 0 16px rgba(255, 79, 176, 0.22));
+  filter: drop-shadow(0 0 46px rgba(139, 60, 232, 0.28)) drop-shadow(0 0 16px rgba(255, 79, 176, 0.26));
 }
 
 @supports not (background-clip: text) {
@@ -493,7 +495,7 @@ h1, h2, h3, p { margin: 0; }
    reads as a glow, at half the filter cost, repeated across every heading
    using this class. */
 @media (max-width: 640px), (pointer: coarse) {
-  .nv-gradient-text { filter: drop-shadow(0 0 32px rgba(139, 60, 232, 0.3)); }
+  .nv-gradient-text { filter: drop-shadow(0 0 32px rgba(180, 55, 200, 0.28)); }
 }
 
 .nv-statement {
@@ -738,7 +740,7 @@ h1, h2, h3, p { margin: 0; }
   content: "";
   position: absolute;
   inset: -70%;
-  background: radial-gradient(circle, rgba(139, 60, 232, 0.55) 0%, rgba(255, 79, 176, 0.35) 30%, transparent 70%);
+  background: radial-gradient(circle, rgba(139, 60, 232, 0.5) 0%, rgba(255, 79, 176, 0.38) 30%, transparent 70%);
   filter: blur(32px);
   z-index: -1;
   opacity: 0;
@@ -764,7 +766,7 @@ h1, h2, h3, p { margin: 0; }
 .nv-hero.is-ready .nv-hero__mark {
   opacity: 1;
   transform: scale(1);
-  filter: drop-shadow(0 0 34px rgba(139, 60, 232, 0.4)) drop-shadow(0 0 64px rgba(255, 79, 176, 0.22));
+  filter: drop-shadow(0 0 34px rgba(139, 60, 232, 0.34)) drop-shadow(0 0 64px rgba(255, 79, 176, 0.28));
   transition-delay: 100ms;
 }
 
