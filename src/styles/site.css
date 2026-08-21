@@ -264,7 +264,7 @@
 .nv-footer .nv-container { position: relative; z-index: 1; }
 .nv-footer__signoff {
   text-align: center;
-  font-size: clamp(2.75rem, 2rem + 5vw, 6rem);
+  font-size: clamp(2.25rem, 1.7rem + 3.2vw, 4.5rem);
   letter-spacing: 0.1em;
   font-weight: 300;
   margin-bottom: var(--space-9);
@@ -357,7 +357,7 @@
 .nv-product-row {
   position: relative;
   display: block;
-  padding: clamp(var(--space-8), 6vw, var(--space-10)) clamp(var(--space-6), 6vw, var(--space-9));
+  padding: clamp(var(--space-7), 4.5vw, var(--space-9)) clamp(var(--space-6), 4.5vw, var(--space-8));
   perspective: 1200px;
 
   background: var(--glass-fill);
@@ -392,11 +392,11 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(640px, 62vw);
-  height: min(640px, 62vw);
+  width: min(500px, 48vw);
+  height: min(500px, 48vw);
   transform: translate(-50%, -50%) scale(0.85);
-  background: radial-gradient(circle, color-mix(in srgb, var(--dot-color, var(--n-purple)) 42%, transparent) 0%, transparent 70%);
-  opacity: 0.55;
+  background: radial-gradient(circle, color-mix(in srgb, var(--dot-color, var(--n-purple)) 38%, transparent) 0%, transparent 70%);
+  opacity: 0.4;
   pointer-events: none;
   transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-slow) var(--ease-out);
   will-change: opacity, transform;
@@ -409,7 +409,7 @@ a.nv-product-row:focus-visible {
 }
 a.nv-product-row:hover::before,
 a.nv-product-row:focus-visible::before {
-  opacity: 0.85;
+  opacity: 0.65;
   transform: translate(-50%, -50%) scale(1);
 }
 @media (prefers-reduced-motion: reduce) {
@@ -448,19 +448,19 @@ a.nv-product-row:focus-visible::before {
 .nv-product-row__icon-holder::before {
   content: "";
   position: absolute;
-  inset: -45%;
-  background: radial-gradient(circle, color-mix(in srgb, var(--dot-color, var(--n-purple)) 60%, transparent) 0%, transparent 70%);
+  inset: -40%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--dot-color, var(--n-purple)) 52%, transparent) 0%, transparent 70%);
   filter: blur(18px);
   z-index: -1;
-  opacity: 0.8;
+  opacity: 0.55;
   transition: opacity var(--dur-base) ease;
 }
-a.nv-product-row:hover .nv-product-row__icon-holder::before { opacity: 1; }
+a.nv-product-row:hover .nv-product-row__icon-holder::before { opacity: 0.8; }
 
 .nv-product-row__icon {
-  width: clamp(52px, 6vw, 96px);
-  height: clamp(52px, 6vw, 96px);
-  border-radius: 22px;
+  width: clamp(48px, 4.5vw, 76px);
+  height: clamp(48px, 4.5vw, 76px);
+  border-radius: 20px;
   display: block;
   opacity: 0.95;
   transition: opacity var(--dur-fast) ease, transform var(--dur-base) var(--ease-out);
@@ -470,18 +470,19 @@ a.nv-product-row:hover .nv-product-row__icon { opacity: 1; transform: scale(1.04
 .nv-product-row__name {
   font-family: var(--font-sans);
   font-weight: 300;
-  font-size: clamp(2.4rem, 1.6rem + 5.4vw, 6rem);
+  font-size: clamp(2rem, 1.4rem + 3vw, 3.75rem);
   letter-spacing: -0.015em;
   color: var(--n-white);
-  transition: color var(--dur-fast) ease, transform var(--dur-base) var(--ease-out);
+  transition: color var(--dur-fast) ease, text-shadow var(--dur-base) ease, transform var(--dur-base) var(--ease-out);
   display: inline-block;
 }
+/* The name stays white on hover — the colour lives in a soft glow behind
+   it, not in the text itself, so the product's own name never turns
+   pink. */
 a.nv-product-row:hover .nv-product-row__name,
 a.nv-product-row:focus-visible .nv-product-row__name {
-  color: transparent;
-  background: var(--n-iris-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
+  color: var(--n-white);
+  text-shadow: 0 0 30px rgba(255, 79, 176, 0.32), 0 0 52px rgba(139, 60, 232, 0.22);
   transform: translateX(0.15em);
 }
 
@@ -749,9 +750,10 @@ a.nv-product-link-row:hover .nv-product-link-row__value {
 .nv-manifesto__title {
   font-family: var(--font-sans);
   font-weight: 300;
-  font-size: clamp(3rem, 1.8rem + 7vw, 7.5rem);
+  font-size: clamp(2.75rem, 1.6rem + 4.5vw, 5rem);
   line-height: 1;
   letter-spacing: -0.01em;
+  color: var(--n-white);
 }
 
 .nv-manifesto__body {

@@ -45,7 +45,7 @@ const beliefs = [
       <div class="nv-intro__inner">
         <BackLink href="/" label="Nuvya" />
         <p class="nv-kicker nv-reveal">Studio</p>
-        <h1 class="nv-display nv-gradient-text nv-reveal nv-reveal--d1" style="margin-top: var(--space-3);">We build.</h1>
+        <h1 class="nv-display nv-reveal nv-reveal--d1" style="margin-top: var(--space-3);">We build.</h1>
         <p class="nv-h2 nv-intro__statement" data-wipe>
           Nuvya conceives, designs, builds, launches and owns software products.
         </p>
@@ -61,7 +61,7 @@ const beliefs = [
           {process.map((step, i) => (
             <div class="nv-manifesto__item">
               <span class="nv-numeral nv-manifesto__numeral">{String(i + 1).padStart(2, "0")}</span>
-              <h2 class="nv-manifesto__title nv-gradient-text">{step.title}</h2>
+              <h2 class="nv-manifesto__title">{step.title}</h2>
               <p class="nv-lede nv-manifesto__body">{step.body}</p>
             </div>
           ))}

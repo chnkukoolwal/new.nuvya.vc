@@ -70,7 +70,7 @@
   /* Iridescent gradient family — the wordmark gradient extended into a
      4-stop sweep (violet → magenta → pink → lavender) used anywhere the
      brand needs to announce itself: headings, glow cores, borders. */
-  --n-text-gradient: linear-gradient(100deg, var(--n-lavender) 0%, var(--n-pink) 100%);
+  --n-text-gradient: linear-gradient(100deg, var(--n-white) 0%, var(--n-lavender) 62%, var(--n-pink-soft) 100%);
   --n-iris-gradient: linear-gradient(115deg, var(--n-violet-electric) 0%, var(--n-magenta-hot) 38%, var(--n-pink) 68%, var(--n-lavender) 100%);
   --n-iris-gradient-soft: linear-gradient(115deg, rgba(139, 60, 232, 0.5) 0%, rgba(255, 79, 176, 0.4) 45%, rgba(242, 184, 221, 0.35) 100%);
 
@@ -288,10 +288,8 @@ html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; -webkit-tap-high
     transition-duration: 120ms;
   }
   a.nv-product-row:active .nv-product-row__name {
-    color: transparent;
-    background: var(--n-iris-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
+    color: var(--n-white);
+    text-shadow: 0 0 30px rgba(255, 79, 176, 0.32), 0 0 52px rgba(139, 60, 232, 0.22);
   }
   a.nv-product-row:active .nv-product-row__icon { opacity: 1; }
   a.nv-product-row:active .nv-product-row__cta { color: var(--n-white); }
@@ -511,8 +509,8 @@ h1, h2, h3, p { margin: 0; }
 .nv-display {
   font-family: var(--font-sans);
   font-weight: 300;
-  font-size: clamp(2.25rem, 1.6rem + 4.4vw, 5rem);
-  line-height: 1.04;
+  font-size: clamp(2.1rem, 1.55rem + 3.2vw, 4.25rem);
+  line-height: 1.05;
   letter-spacing: -0.015em;
   color: var(--n-white);
 }
