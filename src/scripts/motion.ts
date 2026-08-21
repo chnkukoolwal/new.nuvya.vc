@@ -16,6 +16,28 @@
 
   document.addEventListener("touchstart", function () {}, { passive: true });
 
+  /* ---- Stable viewport height ---------------------------------------------
+     iOS Safari changes window.innerHeight live as its toolbar collapses and
+     expands *during* a scroll gesture — every pinned scene below divides by
+     this value once per frame, so reading window.innerHeight fresh each
+     frame turns that toolbar animation directly into scroll-progress jitter
+     (the exact "transitions don't trigger correctly" symptom on iPhone).
+     Cache it instead, refreshed only on resize/orientationchange (debounced
+     so a toolbar-triggered resize mid-scroll doesn't retrigger this either) —
+     never on a scroll or animation frame. visualViewport tracks the layout
+     viewport more consistently than window.innerHeight where it's available. */
+  let vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  let vhTimer: ReturnType<typeof setTimeout> | undefined;
+  const refreshVh = function () {
+    vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  };
+  const scheduleVhRefresh = function () {
+    clearTimeout(vhTimer);
+    vhTimer = setTimeout(refreshVh, 200);
+  };
+  window.addEventListener("resize", scheduleVhRefresh, { passive: true });
+  window.addEventListener("orientationchange", scheduleVhRefresh, { passive: true });
+
   /* ---- Topbar + hero arrival sequence -------------------------------- */
   const topbar = document.querySelector<HTMLElement>(".nv-topbar");
   const hero = document.querySelector<HTMLElement>(".nv-hero");
@@ -241,7 +263,6 @@
 
     const render = function () {
       const rect = scene.getBoundingClientRect();
-      const vh = window.innerHeight;
       const total = rect.height - vh;
       const progress = total > 0 ? clamp01(-rect.top / total) : 0;
 
@@ -278,7 +299,6 @@
 
     const render = function () {
       const rect = scene.getBoundingClientRect();
-      const vh = window.innerHeight;
       const total = rect.height - vh;
       const progress = total > 0 ? clamp01(-rect.top / total) : 0;
 
@@ -316,7 +336,6 @@
   document.querySelectorAll<HTMLElement>("[data-wipe]").forEach(function (statement) {
     const render = function () {
       const rect = statement.getBoundingClientRect();
-      const vh = window.innerHeight;
       const progress = clamp01((vh * 0.82 - rect.top) / (vh * 0.55));
       statement.style.setProperty("--wipe", (progress * 114).toFixed(1) + "%");
     };
@@ -336,7 +355,6 @@
     if (reduceMotion) return;
     const render = function () {
       const rect = el.getBoundingClientRect();
-      const vh = window.innerHeight;
       const progress = clamp01((vh * 0.92 - rect.top) / (vh * 0.52));
       el.style.opacity = progress.toFixed(3);
       el.style.filter = "blur(" + ((1 - progress) * 8).toFixed(2) + "px)";
@@ -354,7 +372,6 @@
     if (!echo) return;
     const render = function () {
       const rect = section.getBoundingClientRect();
-      const vh = window.innerHeight;
       const progress = clamp01((vh * 0.85 - rect.top) / (vh * 0.75));
       const rotate = (progress - 0.5) * 6;
       const scale = 0.95 + progress * 0.07;
@@ -392,7 +409,6 @@
 
     const render = function () {
       const rect = scene.getBoundingClientRect();
-      const vh = window.innerHeight;
       const total = rect.height - vh;
       const progress = total > 0 ? clamp01(-rect.top / total) : 0;
       const pos = progress * span;

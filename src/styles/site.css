@@ -614,6 +614,7 @@ a.nv-product-link-row:hover .nv-product-link-row__value {
 .nv-manifesto {
   position: relative;
   height: 500vh;
+  height: 500svh;
 }
 
 .nv-manifesto__stage {

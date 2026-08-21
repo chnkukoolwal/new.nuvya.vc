@@ -122,6 +122,19 @@
   --radius-pill: 999px;
 }
 
+/* backdrop-filter is real GPU/compositing cost, multiplied by every glass
+   surface on screen at once (nav pill, hero plate, product cards...) and
+   stacked on top of whatever else is scrolling. A lighter blur radius on
+   small/touch screens keeps the material feeling the same (frosted, not
+   flat) while cutting the per-frame cost during the pinned scroll scenes,
+   where the compositor is already under the most pressure. */
+@media (max-width: 640px), (pointer: coarse) {
+  :root {
+    --glass-blur: blur(14px) saturate(150%);
+    --glass-blur-soft: blur(9px) saturate(135%);
+  }
+}
+
 /* ---- Glass surface primitives -------------------------------------------- */
 
 .nv-glass {
@@ -233,10 +246,40 @@ html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; -webkit-tap-high
   html { scroll-behavior: auto; }
 }
 
+/* Touch devices get no :hover at all — these are deliberate press states
+   (not just :hover renamed) so tapping something interactive still feels
+   answered: a brief scale/glow/color response instead of silence until
+   navigation happens. Transitions are fast (120ms) so the press reads as
+   immediate, not delayed. */
 @media (hover: none) {
   .nv-topbar__word:active { opacity: 0.6; }
   .nv-close__link:active { color: var(--n-purple); }
   .nv-close__link:active::after { background: var(--n-purple); }
+
+  .nv-topbar__link:active { color: var(--n-white); }
+  .nv-arrow-link:active { color: var(--n-lavender); gap: 0.6em; }
+  .nv-footer__link:active { color: var(--n-white); }
+  .nv-footer__eco-link:active { color: var(--n-white-a64); }
+
+  a.nv-product-row:active {
+    transform: scale(0.985);
+    box-shadow: var(--glass-shadow-hover);
+    border-color: rgba(255, 205, 240, 0.32);
+    transition-duration: 120ms;
+  }
+  a.nv-product-row:active .nv-product-row__name {
+    color: transparent;
+    background: var(--n-iris-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  a.nv-product-row:active .nv-product-row__icon { opacity: 1; }
+  a.nv-product-row:active .nv-product-row__cta { color: var(--n-white); }
+
+  .nv-about-card:active {
+    border-color: rgba(255, 205, 240, 0.28);
+    box-shadow: var(--glass-shadow-hover);
+  }
 }
 
 body.nuvya {
@@ -367,6 +410,18 @@ h1, h2, h3, p { margin: 0; }
   .nv-atmosphere__wash { animation: none; }
 }
 
+/* Three animated, blurred, full-viewport layers is real compositing cost
+   every frame — affordable on desktop, worth trimming on a phone where the
+   same GPU is also driving a pinned scroll scene. Dropping the wash (the
+   most decorative of the three) keeps the two-layer volumetric field
+   (violet core + magenta counter-drift) that actually carries the
+   identity, without the third layer's constant cost. */
+@media (max-width: 640px), (pointer: coarse) {
+  .nv-atmosphere__wash { display: none; }
+  .nv-atmosphere__glow { filter: blur(6px); }
+  .nv-atmosphere__glow--alt { filter: blur(8px); }
+}
+
 /* ---- Type system --------------------------------------------------------- */
 
 .nv-kicker {
@@ -414,6 +469,13 @@ h1, h2, h3, p { margin: 0; }
 
 @supports not (background-clip: text) {
   .nv-gradient-text { color: var(--n-lavender); }
+}
+
+/* A single drop-shadow pass instead of two on small/touch screens — still
+   reads as a glow, at half the filter cost, repeated across every heading
+   using this class. */
+@media (max-width: 640px), (pointer: coarse) {
+  .nv-gradient-text { filter: drop-shadow(0 0 32px rgba(139, 60, 232, 0.3)); }
 }
 
 .nv-statement {
@@ -554,17 +616,24 @@ h1, h2, h3, p { margin: 0; }
    opacity each frame — the recession as you scroll past is the scene, not
    a decoration on top of it. */
 
+/* Track height uses the same vh-then-svh fallback as the pinned element
+   inside it (below) — on iOS Safari, vh is the *dynamic* viewport (grows as
+   the toolbar collapses mid-scroll) while svh is the stable small-viewport
+   reference. If the track used vh while its sticky child used svh, the two
+   would drift apart during a toolbar-collapse and desync the whole scene;
+   keeping both on svh where it's supported removes that mismatch. */
 .nv-hero-scene {
   position: relative;
   height: 190vh;
+  height: 190svh;
 }
 
 .nv-hero {
   position: sticky;
   top: 0;
   z-index: 1;
-  height: 100svh;
   height: 100vh;
+  height: 100svh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -820,6 +889,7 @@ h1, h2, h3, p { margin: 0; }
 .nv-philosophy-scene {
   position: relative;
   height: 220vh;
+  height: 220svh;
 }
 
 .nv-philosophy {
