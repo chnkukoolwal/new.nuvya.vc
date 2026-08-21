@@ -14,7 +14,7 @@ const products = (await getCollection("products")).sort((a, b) => a.data.order -
     <div class="nv-container">
       <div class="nv-intro__inner">
         <p class="nv-kicker nv-reveal">Products</p>
-        <h1 class="nv-display nv-reveal nv-reveal--d1" style="margin-top: var(--space-3);">
+        <h1 class="nv-display nv-gradient-text nv-reveal nv-reveal--d1" style="margin-top: var(--space-3);">
           What we've built.
         </h1>
         <p class="nv-lede nv-intro__statement nv-reveal nv-reveal--d2">
@@ -30,10 +30,13 @@ const products = (await getCollection("products")).sort((a, b) => a.data.order -
       <div class="nv-product-list" data-stagger-list>
         {products.map((product, i) => (
           <a class="nv-product-row" href={`/products/${product.id}`} style={`--dot-color: ${product.data.color}`}>
+            <span class="nv-product-row__wash" aria-hidden="true"></span>
             <div class="nv-product-row__grid">
               <span class="nv-product-row__index-wrap">
                 {product.data.heroImage && (
-                  <img class="nv-product-row__icon" src={product.data.heroImage} alt="" width="32" height="32" loading="lazy" />
+                  <span class="nv-product-row__icon-holder">
+                    <img class="nv-product-row__icon" src={product.data.heroImage} alt="" width="96" height="96" loading="lazy" />
+                  </span>
                 )}
                 <span class="nv-product-row__index nv-numeral">{String(i + 1).padStart(2, "0")}</span>
               </span>
@@ -43,6 +46,7 @@ const products = (await getCollection("products")).sort((a, b) => a.data.order -
                 {product.data.status}
               </span>
               <p class="nv-lede nv-product-row__tagline">{product.data.tagline}</p>
+              <span class="nv-product-row__cta nv-arrow-link">Visit product <span aria-hidden="true">&rarr;</span></span>
             </div>
           </a>
         ))}

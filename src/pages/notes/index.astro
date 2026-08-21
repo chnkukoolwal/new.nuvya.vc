@@ -19,7 +19,7 @@ const dateFmt = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric
     <div class="nv-container">
       <div class="nv-intro__inner">
         <p class="nv-kicker nv-reveal">Notes</p>
-        <h1 class="nv-display nv-reveal nv-reveal--d1" style="margin-top: var(--space-3);">
+        <h1 class="nv-display nv-gradient-text nv-reveal nv-reveal--d1" style="margin-top: var(--space-3);">
           {notes.length ? "Notes." : "Notes are coming."}
         </h1>
       </div>
@@ -41,7 +41,7 @@ const dateFmt = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric
     </section>
   ) : (
     <section class="nv-forming nv-edge-top" data-forming-scene>
-      <NMark size={558} class="nv-forming__echo" parallax={false} />
+      <NMark size={558} class="nv-forming__echo" data-forming-echo parallax={false} />
       <div class="nv-container">
         <div class="nv-forming__inner">
           <p class="nv-forming__statement nv-reveal nv-notes-empty">

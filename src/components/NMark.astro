@@ -12,6 +12,7 @@ const {
   parallax = false,
   decorative = true,
   variant = "favicon",
+  ...rest
 } = Astro.props;
 
 const asset =
@@ -29,4 +30,5 @@ const asset =
   loading="eager"
   decoding="async"
   data-nv-mark={parallax ? "" : undefined}
+  {...rest}
 />

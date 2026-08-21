@@ -154,6 +154,31 @@
     });
   }
 
+  /* Product cards additionally tilt toward the cursor — a small physical
+     response (max ~5deg) that makes each card read as an object with
+     depth rather than a flat panel. Reuses the same mousemove, writing
+     --tilt-x/--tilt-y (plain degree values, unlike the percentage-based
+     pointer vars) consumed by the perspective transform in site.css. */
+  if (canHover && !reduceMotion) {
+    document.querySelectorAll<HTMLElement>(".nv-product-row").forEach(function (card) {
+      card.addEventListener(
+        "mousemove",
+        function (e) {
+          const rect = card.getBoundingClientRect();
+          const px = (e.clientX - rect.left) / rect.width - 0.5;
+          const py = (e.clientY - rect.top) / rect.height - 0.5;
+          card.style.setProperty("--tilt-x", (px * 5).toFixed(2) + "deg");
+          card.style.setProperty("--tilt-y", (-py * 4).toFixed(2) + "deg");
+        },
+        { passive: true }
+      );
+      card.addEventListener("mouseleave", function () {
+        card.style.setProperty("--tilt-x", "0deg");
+        card.style.setProperty("--tilt-y", "0deg");
+      });
+    });
+  }
+
   /* ==========================================================================
      Scroll-driven scenes — each gated behind an IntersectionObserver so the
      scroll listener only runs while its scene is near the viewport, and each
@@ -273,6 +298,30 @@
     };
     makeScrollScene(section, render);
   });
+
+  /* Studio process — as each stage crosses the centre band of the
+     viewport it becomes the "active" one: its numeral lights up with the
+     brand gradient and the step lifts very slightly. Only one (sometimes
+     two, mid-transition) stage is ever active at once, so scrolling reads
+     as moving a spotlight through the sequence rather than a static list
+     that merely faded in. */
+  (function studioKinetic() {
+    const steps = document.querySelectorAll<HTMLElement>(".nv-process__step");
+    if (!steps.length) return;
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      steps.forEach(function (step) { step.classList.add("is-active"); });
+      return;
+    }
+    const stepObserver = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          entry.target.classList.toggle("is-active", entry.isIntersecting);
+        });
+      },
+      { rootMargin: "-42% 0px -42% 0px", threshold: 0 }
+    );
+    steps.forEach(function (step) { stepObserver.observe(step); });
+  })();
 
   /* Product / process rows — a subtle staggered rise as a list scrolls
      into view, distinct from .nv-reveal only in that siblings in view at

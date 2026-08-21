@@ -41,15 +41,22 @@
 /* ---- Tokens -------------------------------------------------------------- */
 
 :root {
-  /* brand palette — sampled from the Nuvya mark artwork, fixed, do not
-     extend with new hues */
+  /* brand palette — sampled from the Nuvya mark artwork, extended into a
+     full pink/violet material language: the mark's hues pushed to both
+     ends (deeper violet, hotter pink/magenta) so the identity carries the
+     whole site, not just the wordmark. */
   --n-black: #0a0216;
   --n-black-soft: #150a26;
+  --n-void: #050110; /* deepest ground — footer, close, hero recess */
   --n-white: #f6f2f8;
   --n-violet: #6a35ab;
+  --n-violet-deep: #3a1268; /* internal glow / shadow tint, not a decoration */
+  --n-violet-electric: #8b3ce8; /* saturated — hover states, active nav, glow cores */
   --n-magenta: #f0a6cb;
+  --n-magenta-hot: #ff4fb0; /* saturated — CTAs, product accents, bloom cores */
   --n-lavender: #c9aee6;
   --n-pink: #f2b8dd;
+  --n-pink-soft: #ffd6ee;
   --n-purple: #a06adf; /* midpoint accent — links, focus rings, small ui */
 
   --n-white-a64: rgba(246, 242, 248, 0.64);
@@ -60,7 +67,12 @@
   --n-purple-a20: rgba(160, 106, 223, 0.2);
   --n-magenta-a40: rgba(240, 166, 203, 0.4);
 
+  /* Iridescent gradient family — the wordmark gradient extended into a
+     4-stop sweep (violet → magenta → pink → lavender) used anywhere the
+     brand needs to announce itself: headings, glow cores, borders. */
   --n-text-gradient: linear-gradient(100deg, var(--n-lavender) 0%, var(--n-pink) 100%);
+  --n-iris-gradient: linear-gradient(115deg, var(--n-violet-electric) 0%, var(--n-magenta-hot) 38%, var(--n-pink) 68%, var(--n-lavender) 100%);
+  --n-iris-gradient-soft: linear-gradient(115deg, rgba(139, 60, 232, 0.5) 0%, rgba(255, 79, 176, 0.4) 45%, rgba(242, 184, 221, 0.35) 100%);
 
   --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
 
@@ -88,20 +100,21 @@
   --dur-slow: 1100ms;
 
   /* ---- Liquid Glass material ----------------------------------------------
-     A single reusable "glass" material system, modelled on Apple's Liquid
-     Glass: neutral frosted translucency (not tinted a flat colour) that
-     picks up whatever light and colour sit behind it — here, Nuvya's own
-     violet/pink atmosphere glow — plus a bright specular edge along the
-     top where light would catch a physical curved surface. */
-  --glass-fill: linear-gradient(165deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 55%, rgba(255, 255, 255, 0.07) 100%);
-  --glass-fill-soft: linear-gradient(165deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.02) 60%, rgba(255, 255, 255, 0.05) 100%);
-  --glass-border: rgba(255, 255, 255, 0.16);
-  --glass-border-top: rgba(255, 255, 255, 0.42);
-  --glass-blur: blur(22px) saturate(150%);
-  --glass-blur-soft: blur(14px) saturate(130%);
-  --glass-shadow: 0 1px 1px rgba(255, 255, 255, 0.12) inset, 0 18px 45px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(160, 106, 223, 0.06);
-  --glass-shadow-hover: 0 1px 1px rgba(255, 255, 255, 0.18) inset, 0 22px 55px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(160, 106, 223, 0.14), 0 0 32px rgba(160, 106, 223, 0.12);
-  --glass-specular: radial-gradient(circle at var(--pointer-x, 50%) var(--pointer-y, 0%), rgba(255, 255, 255, 0.16), transparent 45%);
+     Nuvya's own material — Apple's Liquid Glass (frosted translucency,
+     specular edge, depth) with every neutral swapped for a violet/magenta
+     tint, so the surface itself reads as Nuvya rather than "dark UI with a
+     pink accent". The fill is warm violet at the base, the top edge and
+     specular catch pink/magenta light, and the shadow carries a soft
+     colour bloom instead of flat black. */
+  --glass-fill: linear-gradient(165deg, rgba(210, 170, 255, 0.16) 0%, rgba(255, 140, 210, 0.05) 50%, rgba(180, 120, 255, 0.09) 100%);
+  --glass-fill-soft: linear-gradient(165deg, rgba(210, 170, 255, 0.1) 0%, rgba(255, 140, 210, 0.03) 55%, rgba(180, 120, 255, 0.06) 100%);
+  --glass-border: rgba(214, 176, 255, 0.22);
+  --glass-border-top: rgba(255, 205, 240, 0.55);
+  --glass-blur: blur(22px) saturate(165%);
+  --glass-blur-soft: blur(14px) saturate(145%);
+  --glass-shadow: 0 1px 1px rgba(255, 220, 250, 0.16) inset, 0 20px 55px rgba(6, 0, 20, 0.55), 0 0 42px rgba(139, 60, 232, 0.14), 0 0 0 1px rgba(240, 120, 210, 0.1);
+  --glass-shadow-hover: 0 1px 1px rgba(255, 225, 250, 0.22) inset, 0 26px 70px rgba(6, 0, 20, 0.58), 0 0 0 1px rgba(240, 130, 215, 0.22), 0 0 46px rgba(255, 79, 176, 0.22), 0 0 90px rgba(139, 60, 232, 0.22);
+  --glass-specular: radial-gradient(circle at var(--pointer-x, 50%) var(--pointer-y, 0%), rgba(255, 224, 248, 0.28), transparent 45%);
 
   --radius-glass-sm: 14px;
   --radius-glass: 22px;
@@ -277,36 +290,89 @@ h1, h2, h3, p { margin: 0; }
   overflow: hidden;
 }
 
+/* Three independently-drifting light sources rather than one static glow:
+   a violet core, a hotter magenta counter-drift, and a slow top wash near
+   the nav — together they read as a single volumetric light field rather
+   than a radial-gradient background, and are the main reason the site
+   should feel unmistakably Nuvya even with the logo removed. */
 .nv-atmosphere__glow {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(880px, 120vw);
-  height: min(880px, 120vw);
+  width: min(1000px, 130vw);
+  height: min(1000px, 130vw);
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(160, 106, 223, 0.16) 0%, rgba(240, 166, 203, 0.045) 38%, transparent 68%);
+  background: radial-gradient(circle, rgba(139, 60, 232, 0.32) 0%, rgba(255, 79, 176, 0.1) 40%, transparent 70%);
   filter: blur(10px);
   animation: nv-drift 34s var(--ease-in-out) infinite alternate;
   will-change: transform;
 }
 
+.nv-atmosphere__glow--alt {
+  position: absolute;
+  top: 62%;
+  left: 78%;
+  width: min(760px, 90vw);
+  height: min(760px, 90vw);
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(255, 79, 176, 0.22) 0%, rgba(139, 60, 232, 0.08) 45%, transparent 72%);
+  filter: blur(14px);
+  animation: nv-drift-alt 46s var(--ease-in-out) infinite alternate;
+  will-change: transform;
+  mix-blend-mode: screen;
+}
+
+.nv-atmosphere__wash {
+  position: absolute;
+  top: -20%;
+  left: 10%;
+  width: min(1200px, 150vw);
+  height: 560px;
+  background: radial-gradient(ellipse, rgba(201, 174, 230, 0.14) 0%, transparent 70%);
+  filter: blur(20px);
+  animation: nv-drift-wash 60s linear infinite alternate;
+}
+
 @keyframes nv-drift {
   0%   { transform: translate(-54%, -52%) scale(1); }
-  50%  { transform: translate(-46%, -49%) scale(1.06); }
+  50%  { transform: translate(-46%, -49%) scale(1.08); }
   100% { transform: translate(-50%, -55%) scale(1); }
+}
+
+@keyframes nv-drift-alt {
+  0%   { transform: translate(-46%, -54%) scale(1); }
+  50%  { transform: translate(-56%, -46%) scale(1.12); }
+  100% { transform: translate(-50%, -50%) scale(0.96); }
+}
+
+@keyframes nv-drift-wash {
+  0%   { transform: translateX(-4%) scale(1); }
+  100% { transform: translateX(4%) scale(1.05); }
 }
 
 .nv-atmosphere__grain {
   position: absolute;
   inset: -10%;
-  opacity: 0.035;
+  opacity: 0.045;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   background-size: 180px 180px;
 }
 
+/* Vignette: deepen the far edges toward --n-void so the glow reads as a
+   light source in a real dark volume, not a flat gradient sat on top. */
+.nv-atmosphere::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 40%, transparent 40%, var(--n-void) 115%);
+  opacity: 0.6;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .nv-atmosphere__glow { animation: none; }
+  .nv-atmosphere__glow,
+  .nv-atmosphere__glow--alt,
+  .nv-atmosphere__wash { animation: none; }
 }
 
 /* ---- Type system --------------------------------------------------------- */
@@ -332,19 +398,26 @@ h1, h2, h3, p { margin: 0; }
 .nv-wordmark {
   font-family: var(--font-sans);
   font-weight: 300;
-  font-size: clamp(2.6rem, 1.6rem + 7.4vw, 8.25rem);
+  font-size: clamp(2.8rem, 1.5rem + 8.6vw, 9.5rem);
   line-height: 1;
   letter-spacing: 0.08em;
   color: var(--n-white);
 }
 
 /* The stylized wordmark reads as a soft lavender-to-pink gradient, matching
-   the mark artwork — same trick everywhere the word appears at display size. */
+   the mark artwork — same trick everywhere the word appears at display size,
+   including when combined with a typography class (.nv-display, .nv-h2...)
+   that sets its own `color` later in this file. !important on color alone
+   is deliberate here: this is a paint-mode utility that must always win
+   that specific property, regardless of what else is applied alongside it.
+   A drop-shadow bloom (two passes: a wide violet wash, a tight pink core)
+   makes the gradient read as luminous rather than flat-printed. */
 .nv-gradient-text {
   background: var(--n-text-gradient);
   -webkit-background-clip: text;
   background-clip: text;
-  color: transparent;
+  color: transparent !important;
+  filter: drop-shadow(0 0 46px rgba(139, 60, 232, 0.32)) drop-shadow(0 0 16px rgba(255, 79, 176, 0.22));
 }
 
 @supports not (background-clip: text) {
@@ -516,6 +589,63 @@ h1, h2, h3, p { margin: 0; }
   will-change: transform, opacity;
 }
 
+/* The hero's glass stage — a physical plate of Nuvya material the whole
+   arrival scene sits inside, rather than type floating on a flat page.
+   Its own reveal is slower and later than its contents, so it reads as
+   the surface the mark/wordmark condense onto, not another fade-up box. */
+@property --nv-edge-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+.nv-hero__plate {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(var(--space-8), 9vw, var(--space-11)) clamp(var(--space-6), 8vw, var(--space-10));
+  border-radius: var(--radius-glass-lg);
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-top-color: var(--glass-border-top);
+  box-shadow: var(--glass-shadow);
+  opacity: 0;
+  transform: scale(0.96);
+  filter: blur(6px);
+  transition: opacity 1500ms var(--ease-out), transform 1500ms var(--ease-out), filter 1500ms var(--ease-out);
+}
+.nv-hero.is-ready .nv-hero__plate {
+  opacity: 1;
+  transform: scale(1);
+  filter: none;
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nv-hero__plate { background: rgba(21, 10, 38, 0.86); }
+}
+
+.nv-hero__plate-edge {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: conic-gradient(from var(--nv-edge-angle), var(--n-violet-electric), var(--n-magenta-hot), var(--n-lavender), var(--n-violet-electric));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.4;
+  animation: nv-edge-spin 16s linear infinite;
+}
+@keyframes nv-edge-spin {
+  to { --nv-edge-angle: 360deg; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nv-hero__plate-edge { animation: none; }
+  .nv-hero__plate { transition-duration: 1ms; }
+}
+
 .nv-hero__mark-holder {
   position: relative;
   display: inline-block;
@@ -525,9 +655,9 @@ h1, h2, h3, p { margin: 0; }
 .nv-hero__mark-holder::before {
   content: "";
   position: absolute;
-  inset: -55%;
-  background: radial-gradient(circle, var(--n-purple-a50) 0%, var(--n-magenta-a40) 32%, transparent 68%);
-  filter: blur(28px);
+  inset: -70%;
+  background: radial-gradient(circle, rgba(139, 60, 232, 0.55) 0%, rgba(255, 79, 176, 0.35) 30%, transparent 70%);
+  filter: blur(32px);
   z-index: -1;
   opacity: 0;
   transition: opacity 1300ms var(--ease-out);
@@ -538,7 +668,7 @@ h1, h2, h3, p { margin: 0; }
 }
 
 .nv-hero__mark {
-  width: clamp(64px, 9vw, 108px);
+  width: clamp(72px, 10vw, 128px);
   height: auto;
   display: block;
   -webkit-mask-image: radial-gradient(ellipse 68% 68% at 50% 50%, #000 58%, transparent 100%);
@@ -552,7 +682,7 @@ h1, h2, h3, p { margin: 0; }
 .nv-hero.is-ready .nv-hero__mark {
   opacity: 1;
   transform: scale(1);
-  filter: none;
+  filter: drop-shadow(0 0 34px rgba(139, 60, 232, 0.4)) drop-shadow(0 0 64px rgba(255, 79, 176, 0.22));
   transition-delay: 100ms;
 }
 
@@ -693,9 +823,26 @@ h1, h2, h3, p { margin: 0; }
   position: relative;
   z-index: 1;
   padding-block: var(--space-10);
+  overflow: hidden;
+}
+
+/* A concentrated light source behind the statement — the hero's glow
+   condensing to one point, so the line feels like it's emerging from the
+   same visual field rather than opening a new, unrelated section. */
+.nv-philosophy__glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(640px, 80vw);
+  height: min(640px, 80vw);
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(255, 79, 176, 0.16) 0%, rgba(139, 60, 232, 0.12) 45%, transparent 72%);
+  filter: blur(20px);
+  pointer-events: none;
 }
 
 .nv-philosophy__inner {
+  position: relative;
   max-width: 640px;
   margin-inline: auto;
   text-align: center;
@@ -703,6 +850,33 @@ h1, h2, h3, p { margin: 0; }
   flex-direction: column;
   align-items: center;
   gap: var(--space-5);
+}
+
+/* ---- Studio teaser: kinetic word sequence -------------------------------
+   "Conceive. Design. Build. Launch. Own." as five words stepping in with
+   their own scale/blur transition (not the shared nv-reveal translateY),
+   bookended in gradient text so the sequence itself reads as motion, not
+   a static list with a fade. */
+.nv-studio-kinetic {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 0.5em;
+}
+.nv-studio-word.nv-reveal {
+  display: inline-block;
+  opacity: 0;
+  transform: scale(0.82);
+  filter: blur(6px);
+  transition: opacity var(--dur-slow) var(--ease-spatial), transform var(--dur-slow) var(--ease-spatial), filter var(--dur-slow) var(--ease-spatial);
+}
+.nv-studio-word.nv-reveal.is-visible {
+  opacity: 1;
+  transform: scale(1);
+  filter: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nv-studio-word.nv-reveal { transition-duration: 1ms; transform: none; filter: none; }
 }
 
 /* Scroll-scrubbed wipe: motion.js drives --wipe (0%-100%) from how far this
@@ -737,7 +911,7 @@ h1, h2, h3, p { margin: 0; }
   gap: var(--space-4);
   max-width: 620px;
   margin-inline: auto;
-  padding: var(--space-8) var(--space-7);
+  padding: var(--space-9) var(--space-7);
 
   background: var(--glass-fill);
   -webkit-backdrop-filter: var(--glass-blur);
@@ -745,7 +919,7 @@ h1, h2, h3, p { margin: 0; }
   border: 1px solid var(--glass-border);
   border-top-color: var(--glass-border-top);
   border-radius: var(--radius-glass-lg);
-  box-shadow: var(--glass-shadow);
+  box-shadow: var(--glass-shadow), 0 0 90px rgba(139, 60, 232, 0.14);
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .nv-forming__inner { background: rgba(21, 10, 38, 0.82); }

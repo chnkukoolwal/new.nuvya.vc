@@ -24,20 +24,23 @@ const structuredData = {
   <div class="nv-hero-scene" data-hero-scene>
     <section class="nv-hero" id="arrival" aria-label="Nuvya">
       <div class="nv-hero__stage" data-hero-stage>
-        <span class="nv-hero__mark-holder">
-          <svg class="nv-hero__guides" data-hero-guides viewBox="0 0 140 140" aria-hidden="true">
-            <path d="M6,20 L6,6 L20,6"/>
-            <path d="M120,6 L134,6 L134,20"/>
-            <path d="M134,120 L134,134 L120,134"/>
-            <path d="M20,134 L6,134 L6,120"/>
-          </svg>
-          <NMark size={108} class="nv-hero__mark" parallax />
-          <span class="nv-hero__mark-sweep" data-hero-sweep aria-hidden="true"></span>
-        </span>
+        <div class="nv-hero__plate">
+          <span class="nv-hero__plate-edge" aria-hidden="true"></span>
+          <span class="nv-hero__mark-holder">
+            <svg class="nv-hero__guides" data-hero-guides viewBox="0 0 140 140" aria-hidden="true">
+              <path d="M6,20 L6,6 L20,6"/>
+              <path d="M120,6 L134,6 L134,20"/>
+              <path d="M134,120 L134,134 L120,134"/>
+              <path d="M20,134 L6,134 L6,120"/>
+            </svg>
+            <NMark size={108} class="nv-hero__mark" parallax />
+            <span class="nv-hero__mark-sweep" data-hero-sweep aria-hidden="true"></span>
+          </span>
 
-        <h1 class="nv-wordmark nv-gradient-text nv-hero__word">NUVYA</h1>
-        <p class="nv-label nv-hero__label">Technology Studios</p>
-        <p class="nv-statement nv-hero__statement">Technology, made tangible.</p>
+          <h1 class="nv-wordmark nv-gradient-text nv-hero__word">NUVYA</h1>
+          <p class="nv-label nv-hero__label">Technology Studios</p>
+          <p class="nv-statement nv-hero__statement">Technology, made tangible.</p>
+        </div>
       </div>
 
       <span class="nv-hero__cue" aria-hidden="true">
@@ -47,6 +50,7 @@ const structuredData = {
   </div>
 
   <section class="nv-philosophy nv-edge-top" id="philosophy" aria-labelledby="philosophy-heading">
+    <span class="nv-philosophy__glow" aria-hidden="true"></span>
     <h2 id="philosophy-heading" class="nv-sr-only">Philosophy</h2>
     <div class="nv-philosophy__inner">
       <p class="nv-kicker nv-reveal">Philosophy</p>
@@ -66,10 +70,13 @@ const structuredData = {
       <div class="nv-product-list" data-stagger-list>
         {products.map((product, i) => (
           <a class="nv-product-row" href={`/products/${product.id}`} style={`--dot-color: ${product.data.color}`}>
+            <span class="nv-product-row__wash" aria-hidden="true"></span>
             <div class="nv-product-row__grid">
               <span class="nv-product-row__index-wrap">
                 {product.data.heroImage && (
-                  <img class="nv-product-row__icon" src={product.data.heroImage} alt="" width="32" height="32" loading="lazy" />
+                  <span class="nv-product-row__icon-holder">
+                    <img class="nv-product-row__icon" src={product.data.heroImage} alt="" width="96" height="96" loading="lazy" />
+                  </span>
                 )}
                 <span class="nv-product-row__index nv-numeral">{String(i + 1).padStart(2, "0")}</span>
               </span>
@@ -79,6 +86,7 @@ const structuredData = {
                 {product.data.status}
               </span>
               <p class="nv-lede nv-product-row__tagline">{product.data.tagline}</p>
+              <span class="nv-product-row__cta nv-arrow-link">Visit product <span aria-hidden="true">&rarr;</span></span>
             </div>
           </a>
         ))}
@@ -89,10 +97,14 @@ const structuredData = {
   <section class="nv-section nv-section--tight nv-edge-top" id="studio" aria-labelledby="studio-heading">
     <div class="nv-container nv-container--narrow" style="text-align:center;">
       <p class="nv-kicker nv-reveal">Studio</p>
-      <p id="studio-heading" class="nv-h2" data-wipe style="margin-top: var(--space-4);">
-        Conceive. Design. Build. Launch. Own.
+      <p id="studio-heading" class="nv-h2 nv-studio-kinetic" style="margin-top: var(--space-4);">
+        <span class="nv-studio-word nv-gradient-text nv-reveal">Conceive.</span>
+        <span class="nv-studio-word nv-reveal nv-reveal--d1">Design.</span>
+        <span class="nv-studio-word nv-reveal nv-reveal--d2">Build.</span>
+        <span class="nv-studio-word nv-reveal nv-reveal--d3">Launch.</span>
+        <span class="nv-studio-word nv-gradient-text nv-reveal nv-reveal--d4">Own.</span>
       </p>
-      <p class="nv-reveal nv-reveal--d1" style="margin-top: var(--space-6);">
+      <p class="nv-reveal nv-reveal--d4" style="margin-top: var(--space-6);">
         <a class="nv-arrow-link" href="/studio" style="justify-content:center;">How Nuvya builds <span aria-hidden="true">&rarr;</span></a>
       </p>
     </div>

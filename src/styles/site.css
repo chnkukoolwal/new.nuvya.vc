@@ -21,24 +21,31 @@
   color: var(--n-white-a64);
   position: relative;
   padding-block: 0.2em;
-  transition: color var(--dur-fast) ease;
+  transition: color var(--dur-fast) ease, text-shadow var(--dur-base) ease;
 }
 .nv-topbar__link::after {
   content: "";
   position: absolute;
   left: 0; right: 100%;
   bottom: -2px;
-  height: 1px;
-  background: var(--n-purple);
+  height: 1.5px;
+  background: var(--n-iris-gradient);
+  border-radius: 2px;
   transition: right var(--dur-base) var(--ease-out);
 }
-.nv-topbar__link:hover,
+.nv-topbar__link:hover {
+  color: var(--n-white);
+}
 .nv-topbar__link[aria-current="page"] {
   color: var(--n-white);
+  text-shadow: 0 0 18px rgba(255, 79, 176, 0.45), 0 0 30px rgba(139, 60, 232, 0.3);
 }
 .nv-topbar__link:hover::after,
 .nv-topbar__link[aria-current="page"]::after {
   right: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nv-topbar__link { transition-duration: 1ms; }
 }
 
 .nv-topbar__toggle {
@@ -123,7 +130,8 @@
 .nv-footer {
   position: relative;
   z-index: 1;
-  padding-block: var(--space-8) var(--space-7);
+  overflow: hidden;
+  padding-block: var(--space-9) var(--space-7);
 }
 
 .nv-footer__row {
@@ -135,18 +143,44 @@
 }
 
 .nv-footer__brand {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-4);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
 }
-.nv-footer__mark { width: 96px; height: auto; flex: none; opacity: 0.9; }
+.nv-footer__mark { width: 40px; height: auto; flex: none; opacity: 0.9; }
 .nv-footer__word {
   font-family: var(--font-sans);
   font-weight: 500;
   font-size: 0.8125rem;
   letter-spacing: 0.14em;
   color: var(--n-white-a64);
+}
+
+/* The footer as a closing title card, not a link block: a huge faded
+   wordmark resolves the whole scroll, the same oversized-echo motion used
+   in the Notes empty state (data-forming-scene/echo, generalized in
+   motion.ts) so the ending rhymes with that moment rather than
+   introducing a new device. */
+.nv-footer__echo {
+  position: absolute;
+  z-index: 0;
+  top: 8%;
+  left: 50%;
+  width: clamp(320px, 46vw, 620px);
+  height: auto;
+  transform: translate(-50%, 0);
+  -webkit-mask-image: radial-gradient(ellipse 45% 45% at 50% 50%, #000 0%, transparent 100%);
+  mask-image: radial-gradient(ellipse 45% 45% at 50% 50%, #000 0%, transparent 100%);
+  opacity: 0.06;
+  pointer-events: none;
+}
+.nv-footer .nv-container { position: relative; z-index: 1; }
+.nv-footer__signoff {
+  text-align: center;
+  font-size: clamp(2.75rem, 2rem + 5vw, 6rem);
+  letter-spacing: 0.1em;
+  font-weight: 300;
+  margin-bottom: var(--space-9);
 }
 
 .nv-footer__nav {
@@ -236,14 +270,18 @@
   gap: var(--space-5);
 }
 
-/* Each product is its own pane of glass — floating, distinct, catching
-   its own accent colour as light behind frosted glass rather than a flat
-   coloured wash. Scales cleanly whether there is 1 product or 10. */
+/* Each product is a physical object, not a list row: a large pane of Nuvya
+   glass that carries its own accent colour as a full-bleed wash plus a
+   concentrated bloom, with a subtle pointer-driven tilt (--tilt-x/--tilt-y,
+   written by motion.ts alongside the existing specular tracking) so the
+   card reads as something with depth, not a flat card design. Scales
+   cleanly whether there is 1 product or 10. */
 .nv-product-row {
   position: relative;
   display: block;
-  padding: var(--space-7) var(--space-7);
+  padding: clamp(var(--space-8), 6vw, var(--space-10)) clamp(var(--space-6), 6vw, var(--space-9));
   overflow: hidden;
+  perspective: 1200px;
 
   background: var(--glass-fill);
   -webkit-backdrop-filter: var(--glass-blur);
@@ -252,7 +290,16 @@
   border-top-color: var(--glass-border-top);
   border-radius: var(--radius-glass-lg);
   box-shadow: var(--glass-shadow);
-  transition: box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+  transform: perspective(1200px) rotateX(var(--tilt-y, 0deg)) rotateY(var(--tilt-x, 0deg));
+  transition: box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+
+.nv-product-row__wash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, color-mix(in srgb, var(--dot-color, var(--n-purple)) 16%, transparent) 0%, transparent 55%);
+  opacity: 0.7;
+  pointer-events: none;
 }
 
 .nv-product-row::before {
@@ -260,11 +307,11 @@
   position: absolute;
   top: 50%;
   right: -10%;
-  width: min(420px, 46vw);
-  height: 420px;
-  transform: translateY(-50%) scale(0.85);
-  background: radial-gradient(circle, color-mix(in srgb, var(--dot-color, var(--n-purple)) 38%, transparent) 0%, transparent 68%);
-  opacity: 0.35;
+  width: min(520px, 52vw);
+  height: 520px;
+  transform: translateY(-50%) scale(0.9);
+  background: radial-gradient(circle, color-mix(in srgb, var(--dot-color, var(--n-purple)) 55%, transparent) 0%, transparent 68%);
+  opacity: 0.5;
   pointer-events: none;
   transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-slow) var(--ease-out);
   will-change: opacity, transform;
@@ -272,17 +319,17 @@
 a.nv-product-row:hover,
 a.nv-product-row:focus-visible {
   box-shadow: var(--glass-shadow-hover);
-  border-color: rgba(255, 255, 255, 0.24);
-  transform: translateY(-2px);
+  border-color: rgba(255, 205, 240, 0.32);
+  transform: perspective(1200px) rotateX(var(--tilt-y, 0deg)) rotateY(var(--tilt-x, 0deg)) translateY(-3px);
 }
 a.nv-product-row:hover::before,
 a.nv-product-row:focus-visible::before {
-  opacity: 1;
-  transform: translateY(-50%) scale(1);
+  opacity: 0.9;
+  transform: translateY(-50%) scale(1.08);
 }
 @media (prefers-reduced-motion: reduce) {
   .nv-product-row,
-  .nv-product-row::before { transition-duration: 1ms; }
+  .nv-product-row::before { transition-duration: 1ms; transform: none; }
   a.nv-product-row:hover { transform: none; }
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -290,6 +337,7 @@ a.nv-product-row:focus-visible::before {
 }
 
 .nv-product-row__grid {
+  position: relative;
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: baseline;
@@ -299,7 +347,7 @@ a.nv-product-row:focus-visible::before {
 .nv-product-row__index-wrap {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-5);
 }
 
 .nv-product-row__index {
@@ -307,20 +355,38 @@ a.nv-product-row:focus-visible::before {
   color: var(--n-white-a38);
 }
 
-.nv-product-row__icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 9px;
-  opacity: 0.9;
-  transition: opacity var(--dur-fast) ease;
+.nv-product-row__icon-holder {
+  position: relative;
+  display: inline-block;
+  border-radius: 24px;
 }
-a.nv-product-row:hover .nv-product-row__icon { opacity: 1; }
+.nv-product-row__icon-holder::before {
+  content: "";
+  position: absolute;
+  inset: -45%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--dot-color, var(--n-purple)) 60%, transparent) 0%, transparent 70%);
+  filter: blur(18px);
+  z-index: -1;
+  opacity: 0.8;
+  transition: opacity var(--dur-base) ease;
+}
+a.nv-product-row:hover .nv-product-row__icon-holder::before { opacity: 1; }
+
+.nv-product-row__icon {
+  width: clamp(52px, 6vw, 96px);
+  height: clamp(52px, 6vw, 96px);
+  border-radius: 22px;
+  display: block;
+  opacity: 0.95;
+  transition: opacity var(--dur-fast) ease, transform var(--dur-base) var(--ease-out);
+}
+a.nv-product-row:hover .nv-product-row__icon { opacity: 1; transform: scale(1.04); }
 
 .nv-product-row__name {
   font-family: var(--font-sans);
   font-weight: 300;
-  font-size: clamp(1.8rem, 1.4rem + 3vw, 3.75rem);
-  letter-spacing: -0.01em;
+  font-size: clamp(2.4rem, 1.6rem + 5.4vw, 6rem);
+  letter-spacing: -0.015em;
   color: var(--n-white);
   transition: color var(--dur-fast) ease, transform var(--dur-base) var(--ease-out);
   display: inline-block;
@@ -328,10 +394,10 @@ a.nv-product-row:hover .nv-product-row__icon { opacity: 1; }
 a.nv-product-row:hover .nv-product-row__name,
 a.nv-product-row:focus-visible .nv-product-row__name {
   color: transparent;
-  background: var(--n-text-gradient);
+  background: var(--n-iris-gradient);
   -webkit-background-clip: text;
   background-clip: text;
-  transform: translateX(6px);
+  transform: translateX(0.15em);
 }
 
 .nv-product-row__meta {
@@ -352,9 +418,17 @@ a.nv-product-row:focus-visible .nv-product-row__name {
 
 .nv-product-row__tagline {
   grid-column: 2 / 3;
-  margin-top: var(--space-2);
+  margin-top: var(--space-3);
   max-width: 46ch;
+  font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.3rem);
 }
+
+.nv-product-row__cta {
+  grid-column: 2 / 3;
+  margin-top: var(--space-6);
+  color: var(--n-white-a64);
+}
+a.nv-product-row:hover .nv-product-row__cta { color: var(--n-white); }
 
 @media (max-width: 640px) {
   .nv-product-row__grid {
@@ -362,6 +436,7 @@ a.nv-product-row:focus-visible .nv-product-row__name {
   }
   .nv-product-row__meta { grid-column: 1 / -1; order: 3; }
   .nv-product-row__tagline { grid-column: 1 / -1; }
+  .nv-product-row__cta { grid-column: 1 / -1; }
 }
 
 /* ---- Product detail -------------------------------------------------------- */
@@ -381,16 +456,17 @@ a.nv-product-row:focus-visible .nv-product-row__name {
 .nv-product-hero__icon-holder::before {
   content: "";
   position: absolute;
-  inset: -60%;
-  background: radial-gradient(circle, color-mix(in srgb, var(--dot-color, var(--n-purple)) 45%, transparent) 0%, transparent 70%);
-  filter: blur(20px);
+  inset: -75%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--dot-color, var(--n-purple)) 65%, transparent) 0%, transparent 70%);
+  filter: blur(26px);
   z-index: -1;
 }
 .nv-product-hero__icon {
-  width: 72px;
-  height: 72px;
-  border-radius: 20px;
+  width: 88px;
+  height: 88px;
+  border-radius: 22px;
   display: block;
+  box-shadow: 0 12px 40px rgba(6, 0, 20, 0.5);
 }
 
 .nv-product-hero__name {
@@ -558,22 +634,40 @@ a.nv-product-link-row:hover .nv-product-link-row__value {
   border-top-color: var(--glass-border-top);
   border-radius: var(--radius-glass-lg);
   box-shadow: var(--glass-shadow);
-  transition: box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
+  transform: scale(1);
+  transition: box-shadow var(--dur-slow) var(--ease-out), border-color var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-spatial);
 }
-.nv-process__step:hover {
+.nv-process__step:hover,
+.nv-process__step.is-active {
   box-shadow: var(--glass-shadow-hover);
-  border-color: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 205, 240, 0.32);
+}
+.nv-process__step.is-active {
+  transform: scale(1.012);
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .nv-process__step { background: rgba(21, 10, 38, 0.78); }
 }
+@media (prefers-reduced-motion: reduce) {
+  .nv-process__step { transition-duration: 1ms; transform: none; }
+}
 
+/* Dim by default; the active stage (scroll-gated in motion.ts) lights up
+   with the brand gradient — a spotlight moving through the sequence. */
 .nv-process__numeral {
   font-family: var(--font-sans);
   font-weight: 300;
   font-size: clamp(3rem, 1.6rem + 6vw, 6.5rem);
   line-height: 1;
   color: var(--n-white-a12);
+  transition: color var(--dur-slow) ease, filter var(--dur-slow) ease;
+}
+.nv-process__step.is-active .nv-process__numeral {
+  color: transparent;
+  background: var(--n-iris-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 28px rgba(139, 60, 232, 0.3));
 }
 
 .nv-process__title {
