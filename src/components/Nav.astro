@@ -30,20 +30,15 @@ const isCurrent = (href: string) => current === href || current.startsWith(href 
       ))}
     </nav>
 
-    <div style="display:flex; align-items:center; gap: var(--space-6);">
-      <a class="nv-topbar__cta" href="mailto:chnkukoolwal@gmail.com">
-        Let&rsquo;s build <span aria-hidden="true">&rarr;</span>
-      </a>
-      <button
-        class="nv-topbar__toggle"
-        data-menu-toggle
-        aria-expanded="false"
-        aria-controls="nv-mobile-menu"
-        aria-label="Open menu"
-      >
-        <span></span><span></span><span></span>
-      </button>
-    </div>
+    <button
+      class="nv-topbar__toggle"
+      data-menu-toggle
+      aria-expanded="false"
+      aria-controls="nv-mobile-menu"
+      aria-label="Open menu"
+    >
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
 
@@ -60,9 +55,6 @@ const isCurrent = (href: string) => current === href || current.startsWith(href 
     ))}
   </nav>
   <div class="nv-menu__foot">
-    <a class="nv-topbar__cta" href="mailto:chnkukoolwal@gmail.com">
-      Let&rsquo;s build <span aria-hidden="true">&rarr;</span>
-    </a>
     <span class="nv-label">Technology Studios</span>
   </div>
 </div>

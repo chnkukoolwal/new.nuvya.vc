@@ -21,6 +21,19 @@ const statusLabel: Record<string, string> = {
   archived: "Archived",
 };
 
+const statusCopy: Record<string, string> = {
+  building: "In active development — not yet public.",
+  launching: "Launching soon.",
+  live: "Live now.",
+  archived: "No longer active.",
+};
+
+const primaryCta = data.url
+  ? { label: `Visit ${data.name}`, href: data.url }
+  : data.appStoreUrl
+  ? { label: "Get it on the App Store", href: data.appStoreUrl }
+  : null;
+
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -58,26 +71,54 @@ const structuredData = {
         <span class="nv-status-dot" style={`--dot-color: ${data.color}`}></span>
         {statusLabel[data.status]} &middot; {data.category}
       </div>
+      {primaryCta && (
+        <p class="nv-reveal nv-reveal--d4" style="margin-top: var(--space-6);">
+          <a class="nv-arrow-link" href={primaryCta.href}>{primaryCta.label} <span aria-hidden="true">&rarr;</span></a>
+        </p>
+      )}
     </div>
   </section>
 
-  {data.sections.map((section) => (
+  {data.sections.map((section, i) => (
     <section class="nv-product-section nv-edge-top">
       <div class="nv-container">
         <div class="nv-product-section__inner">
-          <h2 class="nv-kicker nv-product-section__heading nv-reveal">{section.heading}</h2>
+          <div class="nv-product-section__heading-wrap nv-reveal">
+            <span class="nv-numeral nv-product-section__numeral">{String(i + 1).padStart(2, "0")}</span>
+            <h2 class="nv-kicker nv-product-section__heading">{section.heading}</h2>
+          </div>
           <p class="nv-lede nv-product-section__body nv-reveal nv-reveal--d1">{section.body}</p>
         </div>
       </div>
     </section>
   ))}
 
-  <section class="nv-product-section nv-edge-top" aria-label={`Get ${data.name}`}>
+  {data.screenshots.length > 0 && (
+    <section class="nv-product-experience nv-edge-top" aria-label={`${data.name} experience`}>
+      <div class="nv-container">
+        <p class="nv-kicker nv-reveal">Experience</p>
+        <div class="nv-product-experience__frames" data-stagger-list>
+          {data.screenshots.map((src) => (
+            <div class="nv-product-experience__frame">
+              <img src={src} alt="" loading="lazy" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="nv-product-section nv-edge-top" aria-label={`${data.name} status`}>
     <div class="nv-container">
       <div class="nv-product-section__inner">
-        <h2 class="nv-kicker nv-product-section__heading nv-reveal">Get {data.name}</h2>
+        <div class="nv-product-section__heading-wrap nv-reveal">
+          <h2 class="nv-kicker nv-product-section__heading">Status</h2>
+        </div>
         <div class="nv-product-section__body nv-reveal nv-reveal--d1">
-          <div class="nv-product-links">
+          <p class="nv-lede">
+            {statusCopy[data.status]}{data.launchDate ? ` ${data.launchDate}` : ""}
+          </p>
+          <div class="nv-product-links" style="margin-top: var(--space-6);">
             {data.url ? (
               <a class="nv-product-link-row" href={data.url}>
                 <span class="nv-product-link-row__label">Website</span>
@@ -113,7 +154,7 @@ const structuredData = {
   </section>
 
   <section class="nv-section nv-section--tight nv-edge-top" style="text-align:center;">
-    <p class="nv-label nv-reveal">Built by Nuvya.</p>
+    <a class="nv-label nv-arrow-link nv-reveal" href="/studio" style="justify-content:center;">Built by Nuvya <span aria-hidden="true">&rarr;</span></a>
     <p class="nv-reveal nv-reveal--d1" style="margin-top: var(--space-7);">
       <a class="nv-arrow-link" href="/products" style="justify-content:center;">All products <span aria-hidden="true">&rarr;</span></a>
     </p>

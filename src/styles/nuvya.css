@@ -165,7 +165,6 @@
    is written to --pointer-x/--pointer-y by motion.ts on pointer move;
    defaults to a resting top-centre glint when nothing is tracking it. */
 .nv-topbar__row,
-.nv-topbar__cta,
 .nv-product-row,
 .nv-process__step,
 .nv-note-row,
@@ -179,7 +178,6 @@
   --pointer-y: 0%;
 }
 .nv-topbar__row::after,
-.nv-topbar__cta::after,
 .nv-product-row::after,
 .nv-process__step::after,
 .nv-note-row::after,
@@ -198,7 +196,6 @@
   pointer-events: none;
 }
 .nv-topbar__row:hover::after,
-.nv-topbar__cta:hover::after,
 .nv-product-row:hover::after,
 .nv-process__step:hover::after,
 .nv-note-row:hover::after,
@@ -211,7 +208,6 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .nv-topbar__row::after,
-  .nv-topbar__cta::after,
   .nv-product-row::after,
   .nv-process__step::after,
   .nv-note-row::after,

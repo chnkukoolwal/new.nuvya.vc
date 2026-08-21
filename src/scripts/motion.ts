@@ -135,7 +135,7 @@
      by the radial-gradient highlight in nuvya.css. One shared listener per
      element, only on hover-capable pointers, so it costs nothing on touch. */
   const GLASS_SELECTOR =
-    ".nv-topbar__row, .nv-topbar__cta, .nv-product-row, .nv-process__step, " +
+    ".nv-topbar__row, .nv-product-row, .nv-process__step, " +
     ".nv-note-row, .nv-close__inner, .nv-belief, .nv-404__panel, " +
     ".nv-forming__inner, .nv-product-section__inner";
   if (canHover && !reduceMotion) {
