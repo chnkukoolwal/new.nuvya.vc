@@ -133,7 +133,7 @@
 .nv-menu__link {
   font-family: var(--font-sans);
   font-weight: 300;
-  font-size: clamp(2rem, 1.5rem + 4vw, 3.5rem);
+  font-size: clamp(1.75rem, 1.3rem + 2.8vw, 2.75rem);
   letter-spacing: -0.01em;
   color: var(--n-white-a64);
   padding: 0.1em 0.35em;
@@ -264,7 +264,7 @@
 .nv-footer .nv-container { position: relative; z-index: 1; }
 .nv-footer__signoff {
   text-align: center;
-  font-size: clamp(2.25rem, 1.7rem + 3.2vw, 4.5rem);
+  font-size: clamp(2rem, 1.5rem + 2.2vw, 3.5rem);
   letter-spacing: 0.1em;
   font-weight: 300;
   margin-bottom: var(--space-9);
@@ -458,9 +458,9 @@ a.nv-product-row:focus-visible::before {
 a.nv-product-row:hover .nv-product-row__icon-holder::before { opacity: 0.8; }
 
 .nv-product-row__icon {
-  width: clamp(48px, 4.5vw, 76px);
-  height: clamp(48px, 4.5vw, 76px);
-  border-radius: 20px;
+  width: clamp(40px, 3.2vw, 56px);
+  height: clamp(40px, 3.2vw, 56px);
+  border-radius: 18px;
   display: block;
   opacity: 0.95;
   transition: opacity var(--dur-fast) ease, transform var(--dur-base) var(--ease-out);
@@ -470,7 +470,7 @@ a.nv-product-row:hover .nv-product-row__icon { opacity: 1; transform: scale(1.04
 .nv-product-row__name {
   font-family: var(--font-sans);
   font-weight: 300;
-  font-size: clamp(2rem, 1.4rem + 3vw, 3.75rem);
+  font-size: clamp(1.6rem, 1.2rem + 1.8vw, 2.5rem);
   letter-spacing: -0.015em;
   color: var(--n-white);
   transition: color var(--dur-fast) ease, text-shadow var(--dur-base) ease, transform var(--dur-base) var(--ease-out);
@@ -548,9 +548,9 @@ a.nv-product-row:hover .nv-product-row__cta { color: var(--n-white); }
   z-index: -1;
 }
 .nv-product-hero__icon {
-  width: 88px;
-  height: 88px;
-  border-radius: 22px;
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
   display: block;
   box-shadow: 0 12px 40px rgba(6, 0, 20, 0.5);
 }
@@ -750,7 +750,7 @@ a.nv-product-link-row:hover .nv-product-link-row__value {
 .nv-manifesto__title {
   font-family: var(--font-sans);
   font-weight: 300;
-  font-size: clamp(2.75rem, 1.6rem + 4.5vw, 5rem);
+  font-size: clamp(2.25rem, 1.4rem + 3.2vw, 4rem);
   line-height: 1;
   letter-spacing: -0.01em;
   color: var(--n-white);
@@ -822,8 +822,8 @@ a.nv-product-link-row:hover .nv-product-link-row__value {
 .nv-belief {
   font-family: var(--font-sans);
   font-weight: 300;
-  font-size: clamp(1.5rem, 1.2rem + 2.2vw, 2.75rem);
-  line-height: 1.25;
+  font-size: clamp(1.35rem, 1.1rem + 1.8vw, 2.35rem);
+  line-height: 1.3;
   letter-spacing: -0.01em;
   color: var(--n-white);
   max-width: 18ch;
@@ -920,7 +920,7 @@ a.nv-product-link-row:hover .nv-product-link-row__value {
 .nv-404__code {
   font-family: var(--font-sans);
   font-weight: 300;
-  font-size: clamp(3rem, 2rem + 5vw, 6rem);
+  font-size: clamp(2.5rem, 1.8rem + 3.5vw, 4.5rem);
   letter-spacing: -0.02em;
   color: var(--n-white-a12);
 }
